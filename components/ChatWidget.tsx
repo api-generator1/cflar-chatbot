@@ -10,7 +10,16 @@ interface Message {
 // Import knowledge base data from public folder at runtime
 async function loadKnowledgeBase() {
   try {
-    const response = await fetch('/knowledge-base.json');
+    // Check if we're in WordPress embed mode (detect if we're not on the main app domain)
+    const isEmbedded = !window.location.hostname.includes('vercel.app') && 
+                       !window.location.hostname.includes('localhost');
+    
+    // Use absolute URL when embedded, relative when in preview
+    const knowledgeBaseUrl = isEmbedded 
+      ? 'https://cflar-chatbot.vercel.app/knowledge-base.json'
+      : '/knowledge-base.json';
+    
+    const response = await fetch(knowledgeBaseUrl);
     if (!response.ok) return null;
     return await response.json();
   } catch {
@@ -32,8 +41,12 @@ export function ChatWidget() {
     loadKnowledgeBase().then(setKnowledgeBase);
   }, []);
 
-  // Get API endpoint - use relative path for Vercel deployment
-  const API_ENDPOINT = '/api/chat';
+  // Get API endpoint - use absolute URL when embedded, relative when in preview
+  const isEmbedded = !window.location.hostname.includes('vercel.app') && 
+                     !window.location.hostname.includes('localhost');
+  const API_ENDPOINT = isEmbedded 
+    ? 'https://cflar-chatbot.vercel.app/api/chat'
+    : '/api/chat';
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
