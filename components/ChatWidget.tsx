@@ -1,11 +1,21 @@
 import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { MessageCircle, X, Send, Minimize2, Maximize2, Sparkles, User } from 'lucide-react';
-import { knowledgeBaseData } from '../lib/knowledge-base-data';
 
 interface Message {
   role: 'user' | 'assistant';
   content: string;
+}
+
+// Import knowledge base data from public folder at runtime
+async function loadKnowledgeBase() {
+  try {
+    const response = await fetch('/knowledge-base.json');
+    if (!response.ok) return null;
+    return await response.json();
+  } catch {
+    return null;
+  }
 }
 
 export function ChatWidget() {
@@ -14,10 +24,16 @@ export function ChatWidget() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputValue, setInputValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [knowledgeBase, setKnowledgeBase] = useState<any>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  // Get API endpoint from environment variable or use default
-  const API_ENDPOINT = (typeof import.meta !== 'undefined' && import.meta.env?.VITE_API_ENDPOINT) || '/api/chat';
+  // Load knowledge base on mount
+  useEffect(() => {
+    loadKnowledgeBase().then(setKnowledgeBase);
+  }, []);
+
+  // Get API endpoint - use relative path for Vercel deployment
+  const API_ENDPOINT = '/api/chat';
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -60,7 +76,7 @@ export function ChatWidget() {
         },
         body: JSON.stringify({
           messages: [...messages, userMessage],
-          knowledgeBase: JSON.stringify(knowledgeBaseData),
+          knowledgeBase: JSON.stringify(knowledgeBase),
         }),
       });
 
@@ -117,7 +133,7 @@ export function ChatWidget() {
         },
         body: JSON.stringify({
           messages: [...messages, userMessage],
-          knowledgeBase: JSON.stringify(knowledgeBaseData),
+          knowledgeBase: JSON.stringify(knowledgeBase),
         }),
       });
 
