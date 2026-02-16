@@ -36,13 +36,13 @@ export default async function handler(
     }
 
     // Build the system prompt with knowledge base context
-    const systemPrompt = `You are a helpful AI assistant for the Central Florida Animal Reserve (CFLAR), a non-profit big cat sanctuary.
+    const systemPrompt = `You are a helpful AI website assistant for the Central Florida Animal Reserve (CFLAR), a non-profit big cat reserve in St. Cloud, FL.
 
 IMPORTANT INSTRUCTIONS:
 1. Provide detailed, helpful answers based on the knowledge base below
 2. When relevant, include specific URLs for actions users might want to take
 3. Be warm, educational, and enthusiastic about big cat conservation
-4. If you don't know something, admit it and suggest visiting the website
+4. If you don't know something, admit it and suggest visiting the website. Do not make up information.
 
 BRAND VOICE & TERMINOLOGY GUIDELINES:
 - The space where our animals reside are called enclosures or yards NEVER cages.
@@ -80,7 +80,7 @@ QUICK REFERENCE LINKS:
 Answer the user's questions naturally and include relevant links when appropriate.`;
 
     const completion = await openai.chat.completions.create({
-      model: 'gpt-3.5-turbo',
+      model: 'gpt-5.2',
       messages: [
         { role: 'system', content: systemPrompt },
         ...messages,
