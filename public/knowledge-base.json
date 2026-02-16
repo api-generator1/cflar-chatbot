@@ -1,0 +1,19 @@
+{
+  "lastUpdated": "2026-02-16T00:00:00.000Z",
+  "baseUrl": "https://cflar.dream.press",
+  "pageCount": 1,
+  "pages": [
+    {
+      "url": "https://cflar.dream.press",
+      "title": "Central Florida Animal Reserve - CFLAR",
+      "content": "Welcome to the Central Florida Animal Reserve (CFLAR), a non-profit big cat sanctuary dedicated to the rescue, rehabilitation, and preservation of exotic big cats. We provide a safe haven for tigers, lions, leopards, and other magnificent animals that have been rescued from abuse, neglect, or improper living conditions. Visit us to learn about conservation, book a tour, or support our mission through donations and volunteering.",
+      "headings": [
+        "About CFLAR",
+        "Our Mission",
+        "Visit Us",
+        "Support Our Cause"
+      ],
+      "scrapedAt": "2026-02-16T00:00:00.000Z"
+    }
+  ]
+}
