@@ -42,9 +42,11 @@ function extractLinks($, baseUrl) {
           path = path.slice(0, -1);
         }
         
-        // Skip common non-content pages
+        // Skip common non-content pages and individual blog posts
+        // Allow /blog page, but exclude /blog/post-title
         if (!path.match(/\.(pdf|jpg|jpeg|png|gif|zip|xml|json|css|js)$/i) &&
-            !path.match(/\/wp-admin|\/wp-content|\/wp-includes|\/feed/i)) {
+            !path.match(/\/wp-admin|\/wp-content|\/wp-includes|\/feed/i) &&
+            !path.match(/\/blog\/.+|\/\d{4}\/\d{2}\//i)) {
           links.add(path);
         }
       }
