@@ -26,14 +26,23 @@
       const parser = new DOMParser();
       const doc = parser.parseFromString(html, 'text/html');
       
-      // Find the CSS file
-      const cssLink = doc.querySelector('link[rel="stylesheet"]');
-      if (cssLink) {
+      // Find ALL CSS files (including Google Fonts and app CSS)
+      const cssLinks = doc.querySelectorAll('link[rel="stylesheet"], link[rel="preconnect"]');
+      cssLinks.forEach(cssLink => {
         const link = document.createElement('link');
-        link.rel = 'stylesheet';
-        link.href = WIDGET_URL + cssLink.getAttribute('href');
+        link.rel = cssLink.getAttribute('rel');
+        const href = cssLink.getAttribute('href');
+        
+        // Only prepend WIDGET_URL if it's a relative path (starts with /)
+        link.href = href.startsWith('/') ? WIDGET_URL + href : href;
+        
+        // Copy crossorigin attribute if present
+        if (cssLink.hasAttribute('crossorigin')) {
+          link.crossOrigin = cssLink.getAttribute('crossorigin');
+        }
+        
         document.head.appendChild(link);
-      }
+      });
       
       // Find the JS module file
       const jsScript = doc.querySelector('script[type="module"]');
