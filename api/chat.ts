@@ -90,7 +90,7 @@ HEADINGS: ${page.headings.join(', ')}
 
 TODAY'S DATE: ${new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
 
-⚠️ RESPONSE LENGTH LIMIT: You have a MAXIMUM of 350 tokens (~250 words) per response. Keep answers concise and complete. ALWAYS finish your sentences - do not start new topics if you're running out of space. End naturally with a complete thought.
+⚠️ RESPONSE LENGTH LIMIT: You have a MAXIMUM of 500 tokens (~350 words) per response. Keep answers concise and complete. ALWAYS finish your sentences - do not start new topics if you're running out of space. End naturally with a complete thought.
 
 IMPORTANT: When users ask about "upcoming events" or "future events", ONLY mention events that occur AFTER today's date. Do NOT mention past events. If the knowledge base contains event dates, check them against today's date and filter out any that have already passed.
 
@@ -175,7 +175,7 @@ FINAL REMINDER: DO NOT USE ASTERISKS (*) - Use numbered lists or natural paragra
         ...messages,
       ],
       temperature: 0.7,
-      max_tokens: 350, // Reduced from 1000 to 350 for faster responses (~260 words)
+      max_tokens: 500, // Increased from 350 to 500 for more complete responses (~350 words)
       stream: true, // Enable streaming for instant user feedback
       stream_options: {
         include_usage: true, // Get token usage stats including cache info

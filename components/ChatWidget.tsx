@@ -18,6 +18,12 @@ export function ChatWidget() {
   const [knowledgeBase, setKnowledgeBase] = useState<any>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
+  // 🚨 ASTERISK CLEANUP FUNCTION
+  // Removes all asterisks from AI responses since the AI keeps using them despite instructions
+  const removeAsterisks = (text: string): string => {
+    return text.replace(/\*/g, '');
+  };
+
   // Load knowledge base on mount
   useEffect(() => {
     setKnowledgeBase(knowledgeBaseData);
@@ -127,7 +133,7 @@ export function ChatWidget() {
                     const updated = [...prev];
                     updated[messageIndex] = {
                       role: 'assistant',
-                      content: accumulatedContent,
+                      content: removeAsterisks(accumulatedContent),
                     };
                     return updated;
                   });
@@ -233,7 +239,7 @@ export function ChatWidget() {
                     const updated = [...prev];
                     updated[messageIndex] = {
                       role: 'assistant',
-                      content: accumulatedContent,
+                      content: removeAsterisks(accumulatedContent),
                     };
                     return updated;
                   });
