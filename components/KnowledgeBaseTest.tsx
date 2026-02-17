@@ -116,7 +116,6 @@ export function KnowledgeBaseTest() {
           <h4 className="font-bold mb-2">Debugging Checklist:</h4>
           <ul className="space-y-1">
             <li>✅ Knowledge Base File: {hasKB ? `${knowledgeBaseData.pages.length} pages loaded` : 'NOT FOUND'}</li>
-            <li>✅ Build Environment: {import.meta.env.MODE}</li>
             <li>✅ Current URL: {window.location.href}</li>
           </ul>
         </div>
