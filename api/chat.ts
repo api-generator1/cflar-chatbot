@@ -164,7 +164,8 @@ Answer the user's questions naturally and include relevant links when appropriat
     res.setHeader('Cache-Control', 'no-cache');
     res.setHeader('Connection', 'keep-alive');
     
-    const stream = await openai.chat.completions.create({
+    // GPT-5-mini uses responses.create instead of chat.completions.create
+    const stream = await openai.responses.create({
       model: 'gpt-5-mini',
       messages: [
         { 
@@ -185,7 +186,7 @@ Answer the user's questions naturally and include relevant links when appropriat
       stream_options: {
         include_usage: true, // Get token usage stats including cache info
       }
-    });
+    } as any);
 
     let fullResponse = '';
     let firstChunkTime = 0;
@@ -201,7 +202,12 @@ Answer the user's questions naturally and include relevant links when appropriat
         console.log(`⏱️ Time to First Chunk: ${firstChunkTime}ms`);
       }
 
+      // DEBUG: Log the entire chunk structure to see what GPT-5-mini returns
+      console.log(`🔍 Raw chunk ${chunkCount}:`, JSON.stringify(chunk, null, 2));
+
       const content = chunk.choices[0]?.delta?.content || '';
+      console.log(`📝 Extracted content from chunk ${chunkCount}:`, content ? `"${content.substring(0, 50)}..."` : 'EMPTY');
+      
       if (content) {
         fullResponse += content;
         // Send chunk to client as SSE
