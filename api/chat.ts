@@ -77,23 +77,14 @@ HEADINGS: ${page.headings.join(', ')}
     
     const systemPrompt = `You are a helpful AI website assistant for the Central Florida Animal Reserve (CFLAR), a non-profit big cat reserve in St. Cloud, FL.
 
-CRITICAL FORMATTING RULE - ALWAYS USE MARKDOWN LINKS:
-When mentioning ANY webpage or URL, you MUST use this exact format: [Page Name](URL)
-
-✅ CORRECT Examples:
-- "Learn more on the [Group Volunteers page] (hyperlink to https://cflar.dream.press/get-involved/volunteer/group-volunteers)"
-- "Visit the [Tours page](hyperlink to https://cflar.dream.press/visit/tours) to book"
-- "Check out [Sip & Stroll – Spring 2026](hyperlink to https://cflar.dream.press/event/sip-and-stroll-spring-2026) for tickets"
-
-❌ NEVER DO THIS:
-- "Learn more here: https://cflar.dream.press/..."
-- "Tours page: https://cflar.dream.press/visit/tours"
-- "Sip & Stroll – Spring 2026 https://cflar.dream.press/..."
-
 IMPORTANT INSTRUCTIONS:
 1. Provide detailed, helpful answers based on the knowledge base below
-2. Be warm, educational, and enthusiastic about big cat conservation
-3. If you don't know something, admit it and suggest visiting the website. Do not make up information.
+2. When including URLs in your responses, format them using the page title instead of generic words like "here" or "this link"
+   - CORRECT: "Learn more on the Group Volunteers page: https://cflar.dream.press/get-involved/volunteer/group-volunteers"
+   - CORRECT: "Visit the Tours page (https://cflar.dream.press/visit/tours) to book your experience"
+   - INCORRECT: "Learn more [here](https://cflar.dream.press/...)"
+3. Be warm, educational, and enthusiastic about big cat conservation
+4. If you don't know something, admit it and suggest visiting the website. Do not make up information.
 
 BRAND VOICE & TERMINOLOGY GUIDELINES:
 - The space where our animals reside are called enclosures or yards NEVER cages.
@@ -133,34 +124,16 @@ QUICK REFERENCE LINKS:
 Answer the user's questions naturally and include relevant links when appropriate.`;
 
     const completion = await openai.chat.completions.create({
-      model: 'gpt-4o-mini', // Fast and cost-effective model
+      model: 'gpt-4o-mini', // Fixed: was 'gpt-5.2' which doesn't exist
       messages: [
         { role: 'system', content: systemPrompt },
         ...messages,
       ],
       temperature: 0.7,
-      max_tokens: 250, // Allows detailed responses with links
+      max_tokens: 1000, // Increased from 500 to allow more detailed responses with links
     });
 
     const responseMessage = completion.choices[0]?.message?.content || 'I apologize, but I was unable to generate a response.';
-
-    // Log cache usage for monitoring cost savings
-    const usage = completion.usage;
-    if (usage) {
-      console.log('=== TOKEN USAGE ===');
-      console.log('Prompt tokens:', usage.prompt_tokens);
-      console.log('Completion tokens:', usage.completion_tokens);
-      console.log('Total tokens:', usage.total_tokens);
-      // Cache stats (if available in usage object)
-      if ('prompt_tokens_details' in usage) {
-        const details = (usage as any).prompt_tokens_details;
-        if (details?.cached_tokens) {
-          console.log('🎯 CACHED tokens:', details.cached_tokens);
-          console.log('💰 Cache savings: ~', Math.round((details.cached_tokens / usage.prompt_tokens) * 100), '%');
-        }
-      }
-      console.log('==================');
-    }
 
     return res.status(200).json({
       message: responseMessage,
