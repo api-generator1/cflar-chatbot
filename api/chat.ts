@@ -35,7 +35,46 @@ export default async function handler(
       return res.status(400).json({ error: 'Invalid request: messages required' });
     }
 
+    // Debug logging
+    console.log('=== CHAT API DEBUG ===');
+    console.log('Knowledge Base received:', knowledgeBase ? 'YES' : 'NO');
+    if (knowledgeBase) {
+      try {
+        const kb = JSON.parse(knowledgeBase);
+        console.log('KB Pages:', kb.pageCount || 0);
+        console.log('KB Last Updated:', kb.lastUpdated);
+      } catch (e) {
+        console.log('KB Parse Error:', e);
+      }
+    }
+    console.log('===================');
+
     // Build the system prompt with knowledge base context
+    
+    // Parse and format the knowledge base for the AI
+    let formattedKnowledgeBase = 'No knowledge base provided. Please direct users to visit https://cflar.dream.press for information.';
+    
+    if (knowledgeBase) {
+      try {
+        const kb = JSON.parse(knowledgeBase);
+        if (kb.pages && kb.pages.length > 0) {
+          formattedKnowledgeBase = kb.pages.map((page: any) => {
+            return `
+PAGE: ${page.title}
+URL: ${page.url}
+CONTENT: ${page.content}
+HEADINGS: ${page.headings.join(', ')}
+---`;
+          }).join('\n\n');
+          
+          console.log('✅ Formatted KB - Total pages:', kb.pages.length);
+          console.log('📄 Sample page:', kb.pages[0]?.title);
+        }
+      } catch (e) {
+        console.error('Failed to parse knowledge base:', e);
+      }
+    }
+    
     const systemPrompt = `You are a helpful AI website assistant for the Central Florida Animal Reserve (CFLAR), a non-profit big cat reserve in St. Cloud, FL.
 
 IMPORTANT INSTRUCTIONS:
@@ -55,20 +94,22 @@ BRAND VOICE & TERMINOLOGY GUIDELINES:
 - Note: Sanctuary, as a concept became specific in the state of Florida secondary to specific laws.  See 68A-6.006. Sanctuaries; Retired Performing Wildlife for definitions
 - We rehome cats in need but NEVER rescue.
 - The population of animals as a group are referred to as residents NEVER as a collection.  A single animal at the reserve is called a resident.
-- We utilize pronouns to refer to our animals residents as a reflection of biological sex but NEVER refer to them as objects (i.e.: “it”)
+- We utilize pronouns to refer to our animals residents as a reflection of biological sex but NEVER refer to them as objects (i.e.: "it")
 - Note: the use of pronouns for humans is outside the scope of our mission and therefore do not take a stance on the use of pronouns related to humans.
-- We are a volunteer driven organization NEVER “all volunteer” or 100% volunteer.
+- We are a volunteer driven organization NEVER "all volunteer" or 100% volunteer.
 - We provide guided tours or scheduled visitation but are NEVER open to the public.
 - We support animal welfare but NEVER animal rights.
 - We advocate for legislation that enables us to fulfill our mission but NEVER lobby on behalf of a political party.
 - We do not currently allow breeding at our facility but NEVER refer to breeding as evil.
-- We are in favor of appropriate homes for animals that cannot be in the wild but NEVER take a for/against stance on “captivity”.
+- We are in favor of appropriate homes for animals that cannot be in the wild but NEVER take a for/against stance on "captivity".
 - We avoid realistic animal print as part of decoration, clothing, or merchandise.
 - The collective of people working on behalf of the organization is known as TeamCFAR
 
+GENERAL INFORMATION
+Central Florida Animal Reserve is located at 500 Broussard Rd, St. Cloud, FL 34773.
 
 KNOWLEDGE BASE:
-${knowledgeBase || 'No knowledge base provided. Please direct users to visit https://cflar.dream.press for information.'}
+${formattedKnowledgeBase}
 
 QUICK REFERENCE LINKS:
 - Donate: https://cflar.dream.press/get-involved/donate/
@@ -80,13 +121,13 @@ QUICK REFERENCE LINKS:
 Answer the user's questions naturally and include relevant links when appropriate.`;
 
     const completion = await openai.chat.completions.create({
-      model: 'gpt-5.2',
+      model: 'gpt-4o-mini', // Fixed: was 'gpt-5.2' which doesn't exist
       messages: [
         { role: 'system', content: systemPrompt },
         ...messages,
       ],
       temperature: 0.7,
-      max_tokens: 500,
+      max_tokens: 1000, // Increased from 500 to allow more detailed responses with links
     });
 
     const responseMessage = completion.choices[0]?.message?.content || 'I apologize, but I was unable to generate a response.';

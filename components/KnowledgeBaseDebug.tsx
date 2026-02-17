@@ -5,59 +5,16 @@ import knowledgeBaseData from '../src/knowledge-base';
 
 export function KnowledgeBaseDebug() {
   const [knowledgeBase, setKnowledgeBase] = useState<any>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false); // Changed from true since we load synchronously
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
     loadKnowledgeBase();
   }, []);
 
-  const loadKnowledgeBase = async () => {
-    setIsLoading(true);
-    try {
-      // Use the imported module directly
+  const loadKnowledgeBase = () => {
+    if (knowledgeBaseData) {
       setKnowledgeBase(knowledgeBaseData);
-    } catch (error) {
-      console.error('Failed to load knowledge base:', error);
-      // Set a fallback empty knowledge base
-      setKnowledgeBase({
-        lastUpdated: new Date().toISOString(),
-        baseUrl: 'https://cflar.dream.press',
-        pageCount: 0,
-        pages: []
-      });
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const runScraper = async () => {
-    setIsLoading(true);
-    try {
-      const response = await fetch('/api/scraper', {
-        method: 'POST',
-      });
-      
-      // Check if response is JSON
-      const contentType = response.headers.get('content-type');
-      if (!contentType || !contentType.includes('application/json')) {
-        throw new Error('API endpoint not found. This only works in production (Vercel deployment).');
-      }
-      
-      const result = await response.json();
-      
-      if (response.ok && result.success) {
-        // Update the knowledge base with the new data
-        setKnowledgeBase(result.data);
-        alert(`Scraper completed! Indexed ${result.data.pageCount} pages.`);
-      } else {
-        alert(`Scraper failed: ${result.message || 'Unknown error'}`);
-      }
-    } catch (error) {
-      console.error('Scraper error:', error);
-      alert('Scraper failed. Check console for errors.');
-    } finally {
-      setIsLoading(false);
     }
   };
 
