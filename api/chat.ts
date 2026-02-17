@@ -14,9 +14,7 @@ export default async function handler(
   res: VercelResponse
 ) {
   // ⏱️ Start total request timer
-const totalTime = Date.now() - startTime;
-console.log(`⏱️ TOTAL TIME: ${totalTime}ms`);
-
+  const startTime = Date.now();
   
   // Enable CORS for your WordPress site
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -45,7 +43,7 @@ console.log(`⏱️ TOTAL TIME: ${totalTime}ms`);
     
     // Debug logging
     console.log('=== CHAT API DEBUG ===');
-    console.log('🤖 Model: gpt-5-mini (with streaming + caching)');
+    console.log('🤖 Model: gpt-4o-mini (with streaming + caching)');
     console.log('Knowledge Base received:', knowledgeBase ? 'YES' : 'NO');
     if (knowledgeBase) {
       try {
@@ -166,65 +164,93 @@ Answer the user's questions naturally and include relevant links when appropriat
     res.setHeader('Cache-Control', 'no-cache');
     res.setHeader('Connection', 'keep-alive');
     
-// Convert incoming chat messages to Responses API input format
-const input = (messages || []).map((m: any) => ({
-  role: m.role,              // "user" | "assistant" | "developer" (system ok if you used it before)
-  content: m.content,        // string is fine
-}));
+    const stream = await openai.chat.completions.create({
+      model: 'gpt-4o-mini',
+      messages: [
+        { 
+          role: 'system', 
+          content: [
+            {
+              type: 'text',
+              text: systemPrompt,
+              // Enable prompt caching for the knowledge base (saves 50% on input tokens)
+              cache_control: { type: 'ephemeral' }
+            }
+          ] as any
+        },
+        ...messages,
+      ],
+      temperature: 0.7,
+      max_tokens: 350, // Reduced from 1000 to 350 for faster responses (~260 words)
+      stream: true, // Enable streaming for instant user feedback
+      stream_options: {
+        include_usage: true, // Get token usage stats including cache info
+      }
+    });
 
-const stream = await openai.responses.create({
-  model: "gpt-5-mini",
-  instructions: systemPrompt,
-  input,
-  stream: true,
-  max_output_tokens: 350,
-});
+    let fullResponse = '';
+    let firstChunkTime = 0;
+    let chunkCount = 0;
 
-let fullResponse = "";
-let firstChunkTime = 0;
-let chunkCount = 0;
+    // Stream the response chunks to the client
+    for await (const chunk of stream) {
+      chunkCount++;
+      
+      // Track time to first chunk (TTFB - Time To First Byte)
+      if (chunkCount === 1) {
+        firstChunkTime = Date.now() - apiCallStart;
+        console.log(`⏱️ Time to First Chunk: ${firstChunkTime}ms`);
+      }
 
-for await (const event of stream as any) {
-  chunkCount++;
+      const content = chunk.choices[0]?.delta?.content || '';
+      if (content) {
+        fullResponse += content;
+        // Send chunk to client as SSE
+        res.write(`data: ${JSON.stringify({ content })}\n\n`);
+      }
 
-  if (chunkCount === 1) {
-    firstChunkTime = Date.now() - apiCallStart;
-    console.log(`⏱️ Time to First Event: ${firstChunkTime}ms`);
-  }
-
-  // Stream only text deltas to the client
-  if (event.type === "response.output_text.delta") {
-    const content = event.delta || "";
-    if (content) {
-      fullResponse += content;
-      res.write(`data: ${JSON.stringify({ content })}\n\n`);
+      // Check for usage stats in the final chunk
+      if (chunk.usage) {
+        const usage = chunk.usage;
+        console.log('');
+        console.log('=== TOKEN USAGE ===');
+        console.log('Prompt tokens:', usage.prompt_tokens);
+        console.log('Completion tokens:', usage.completion_tokens);
+        console.log('Total tokens:', usage.total_tokens);
+        
+        // Log cache performance
+        if ('prompt_tokens_details' in usage) {
+          const details = (usage as any).prompt_tokens_details;
+          if (details?.cached_tokens) {
+            console.log('🎯 CACHED tokens:', details.cached_tokens);
+            console.log('💰 Cache savings:', Math.round((details.cached_tokens / usage.prompt_tokens) * 100), '%');
+          }
+        }
+        console.log('==================');
+      }
     }
-  }
 
-  // Optional: log completion + usage
-  if (event.type === "response.completed") {
-    console.log("✅ response.completed");
-    if (event.response?.usage) {
-      console.log("Usage:", event.response.usage);
-    }
-  }
+    // ⏱️ Streaming complete
+    const apiCallEnd = Date.now();
+    const totalTime = Date.now() - startTime;
+    
+    console.log('');
+    console.log('=== PERFORMANCE SUMMARY ===');
+    console.log(`🤖 Model: gpt-4o-mini (streaming + caching)`);
+    console.log(`⏱️ KB Parsing: ${kbParseEnd - kbParseStart}ms`);
+    console.log(`⏱️ Time to First Chunk: ${firstChunkTime}ms`);
+    console.log(`⏱️ Total Streaming Time: ${apiCallEnd - apiCallStart}ms`);
+    console.log(`⏱️ Total Chunks: ${chunkCount}`);
+    console.log(`⏱️ TOTAL TIME: ${totalTime}ms`);
+    console.log('==========================');
+    console.log('');
 
-  if (event.type === "error") {
-    console.error("Stream error event:", event);
-  }
-}
-
-res.write(`data: [DONE]\n\n`);
-res.end();
+    // Send done signal
+    res.write(`data: [DONE]\n\n`);
+    res.end();
 
   } catch (error: any) {
     console.error('OpenAI API Error:', error);
-    console.error('Error details:', {
-      message: error.message,
-      status: error.status,
-      code: error.code,
-      type: error.type,
-    });
     
     // Send error as SSE
     res.write(`data: ${JSON.stringify({ 
