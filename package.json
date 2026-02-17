@@ -8,7 +8,8 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "scrape": "node scripts/scrape-website.js"
+    "scrape": "node scripts/scrape-website.js",
+    "convert-kb": "node scripts/convert-kb-to-ts.js"
   },
   "dependencies": {
     "react": "^18.3.1",
