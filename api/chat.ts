@@ -81,9 +81,9 @@ CRITICAL FORMATTING RULE - ALWAYS USE MARKDOWN LINKS:
 When mentioning ANY webpage or URL, you MUST use this exact format: [Page Name](URL)
 
 ✅ CORRECT Examples:
-- "Learn more on the [Group Volunteers page](https://cflar.dream.press/get-involved/volunteer/group-volunteers)"
-- "Visit the [Tours page](https://cflar.dream.press/visit/tours) to book"
-- "Check out [Sip & Stroll – Spring 2026](https://cflar.dream.press/event/sip-and-stroll-spring-2026) for tickets"
+- "Learn more on the [Group Volunteers page] (hyperlink to https://cflar.dream.press/get-involved/volunteer/group-volunteers)"
+- "Visit the [Tours page](hyperlink to https://cflar.dream.press/visit/tours) to book"
+- "Check out [Sip & Stroll – Spring 2026](hyperlink to https://cflar.dream.press/event/sip-and-stroll-spring-2026) for tickets"
 
 ❌ NEVER DO THIS:
 - "Learn more here: https://cflar.dream.press/..."
@@ -139,7 +139,7 @@ Answer the user's questions naturally and include relevant links when appropriat
         ...messages,
       ],
       temperature: 0.7,
-      max_tokens: 500, // Allows detailed responses with links
+      max_tokens: 250, // Allows detailed responses with links
     });
 
     const responseMessage = completion.choices[0]?.message?.content || 'I apologize, but I was unable to generate a response.';
