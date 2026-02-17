@@ -97,8 +97,6 @@ IMPORTANT: When users ask about "upcoming events" or "future events", ONLY menti
 STRICT FORMATTING RULE:
 Never use asterisks (*) for bold text or lists. Do not use *, **, or *** anywhere in the response.
 
-Use numbered lists (1. 2. 3.) or plain paragraph formatting instead.
-
 CRITICAL FORMATTING RULE
 ALWAYS USE MARKDOWN LINKS for any URL mention: [Page Name](URL)
 
