@@ -125,7 +125,7 @@ QUICK REFERENCE LINKS:
 Answer the user's questions naturally and include relevant links when appropriate.`;
 
     const completion = await openai.chat.completions.create({
-      model: 'gpt-5.2-mini', // Using gpt-5-mini with automatic prompt caching support
+      model: 'gpt-5-mini', // Using gpt-5-mini with automatic prompt caching support
       messages: [
         { role: 'system', content: systemPrompt },
         ...messages,
