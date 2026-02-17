@@ -139,7 +139,7 @@ Answer the user's questions naturally and include relevant links when appropriat
         ...messages,
       ],
       // GPT-5 mini only supports temperature: 1 (default), so we omit it
-      max_completion_tokens: 1000, // GPT-5 mini uses max_completion_tokens instead of max_tokens
+      max_completion_tokens: 250, // Reduced from 1000 for faster responses (~375 words)
     });
 
     const responseMessage = completion.choices[0]?.message?.content || 'I apologize, but I was unable to generate a response.';
