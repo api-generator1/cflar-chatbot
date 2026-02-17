@@ -133,13 +133,13 @@ QUICK REFERENCE LINKS:
 Answer the user's questions naturally and include relevant links when appropriate.`;
 
     const completion = await openai.chat.completions.create({
-      model: 'gpt-5-mini', // Using gpt-5-mini with automatic prompt caching support
+      model: 'gpt-4o-mini', // Fast and cost-effective model
       messages: [
         { role: 'system', content: systemPrompt },
         ...messages,
       ],
-      // GPT-5 mini only supports temperature: 1 (default), so we omit it
-      max_completion_tokens: 250, // Reduced from 1000 for faster responses (~375 words)
+      temperature: 0.7,
+      max_tokens: 500, // Allows detailed responses with links
     });
 
     const responseMessage = completion.choices[0]?.message?.content || 'I apologize, but I was unable to generate a response.';
