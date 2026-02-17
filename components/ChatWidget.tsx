@@ -1,30 +1,38 @@
 import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { MessageCircle, X, Send, Minimize2, Maximize2, Sparkles, User } from 'lucide-react';
+// Import knowledge base directly as a module (more reliable than fetching)
+import knowledgeBaseData from '../src/knowledge-base';
 
 interface Message {
   role: 'user' | 'assistant';
   content: string;
 }
 
-// Import knowledge base data from public folder at runtime
-async function loadKnowledgeBase() {
-  try {
-    // Check if we're in WordPress embed mode (detect if we're not on the main app domain)
-    const isEmbedded = !window.location.hostname.includes('vercel.app') && 
-                       !window.location.hostname.includes('localhost');
-    
-    // Use absolute URL when embedded, relative when in preview
-    const knowledgeBaseUrl = isEmbedded 
-      ? 'https://cflar-chatbot.vercel.app/knowledge-base.json'
-      : '/knowledge-base.json';
-    
-    const response = await fetch(knowledgeBaseUrl);
-    if (!response.ok) return null;
-    return await response.json();
-  } catch {
-    return null;
-  }
+// Helper function to convert markdown links [text](url) to HTML
+function renderMessageWithLinks(content: string) {
+  // Replace markdown links [text](url) with HTML links
+  const parts = content.split(/(\[([^\]]+)\]\(([^)]+)\))/g);
+  
+  return parts.map((part, index) => {
+    // Check if this part matches [text](url) pattern
+    const linkMatch = part.match(/\[([^\]]+)\]\(([^)]+)\)/);
+    if (linkMatch) {
+      const [, text, url] = linkMatch;
+      return (
+        <a
+          key={index}
+          href={url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-blue-600 hover:text-blue-800 underline font-semibold"
+        >
+          {text}
+        </a>
+      );
+    }
+    return <span key={index}>{part}</span>;
+  });
 }
 
 export function ChatWidget() {
@@ -38,7 +46,7 @@ export function ChatWidget() {
 
   // Load knowledge base on mount
   useEffect(() => {
-    loadKnowledgeBase().then(setKnowledgeBase);
+    setKnowledgeBase(knowledgeBaseData);
   }, []);
 
   // Get API endpoint - use absolute URL when embedded, relative when in preview
@@ -178,7 +186,7 @@ export function ChatWidget() {
   };
 
   return (
-    <div id="cflar-chatbot-root" style={{ all: 'initial', fontFamily: 'Lato, sans-serif' }}>
+    <div id="cflar-chatbot-root">
       {/* Floating Button */}
       <AnimatePresence>
         {!isOpen && (
@@ -190,7 +198,6 @@ export function ChatWidget() {
             whileTap={{ scale: 0.95 }}
             onClick={() => setIsOpen(true)}
             className="fixed bottom-6 right-6 bg-[#7d401b] text-white rounded-full p-4 shadow-lg hover:bg-[#8F6A54] transition-colors z-50"
-            style={{ fontFamily: 'Lato, sans-serif', border: 'none', cursor: 'pointer' }}
           >
             <MessageCircle size={28} />
           </motion.button>
@@ -211,26 +218,23 @@ export function ChatWidget() {
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
             transition={{ duration: 0.2 }}
             className="fixed bottom-6 right-6 w-[400px] bg-[#fff2dc] rounded-2xl shadow-2xl flex flex-col overflow-hidden z-50"
-            style={{ fontFamily: 'Lato, sans-serif' }}
           >
             {/* Header */}
             <div className="bg-[#7d401b] text-white px-6 py-4 flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <Sparkles size={20} />
-                <h3 className="font-semibold text-lg leading-tight" style={{ margin: 0, padding: 0 }}>CFAR Assistant</h3>
+                <h3 className="font-semibold text-lg">CFAR Assistant</h3>
               </div>
               <div className="flex gap-2">
                 <button
                   onClick={() => setIsMinimized(!isMinimized)}
                   className="hover:bg-[#8F6A54] p-1 rounded transition-colors"
-                  style={{ border: 'none', cursor: 'pointer', background: 'transparent' }}
                 >
                   {isMinimized ? <Maximize2 size={20} /> : <Minimize2 size={20} />}
                 </button>
                 <button
                   onClick={() => setIsOpen(false)}
                   className="hover:bg-[#8F6A54] p-1 rounded transition-colors"
-                  style={{ border: 'none', cursor: 'pointer', background: 'transparent' }}
                 >
                   <X size={20} />
                 </button>
@@ -246,21 +250,18 @@ export function ChatWidget() {
                     <button
                       onClick={() => sendQuickAction('What are your hours?')}
                       className="border-2 border-[#7d401b] text-[#7d401b] bg-[#fff2dc] hover:bg-[#7d401b] hover:text-white py-2 px-4 rounded-full text-sm font-semibold transition-colors uppercase"
-                      style={{ cursor: 'pointer', fontFamily: 'Lato, sans-serif' }}
                     >
                       HOURS
                     </button>
                     <button
                       onClick={() => sendQuickAction('How can I volunteer?')}
                       className="border-2 border-[#7d401b] text-[#7d401b] bg-[#fff2dc] hover:bg-[#7d401b] hover:text-white py-2 px-4 rounded-full text-sm font-semibold transition-colors uppercase"
-                      style={{ cursor: 'pointer', fontFamily: 'Lato, sans-serif' }}
                     >
                       VOLUNTEER
                     </button>
                     <button
                       onClick={() => sendQuickAction('Tell me about upcoming events')}
                       className="border-2 border-[#7d401b] text-[#7d401b] bg-[#fff2dc] hover:bg-[#7d401b] hover:text-white py-2 px-4 rounded-full text-sm font-semibold transition-colors uppercase"
-                      style={{ cursor: 'pointer', fontFamily: 'Lato, sans-serif' }}
                     >
                       EVENTS
                     </button>
@@ -288,7 +289,9 @@ export function ChatWidget() {
                             : 'bg-[#f0f0f0] text-black shadow-sm'
                         }`}
                       >
-                        <p className="text-base whitespace-pre-wrap leading-relaxed" style={{ margin: 0, padding: 0 }}>{message.content}</p>
+                        <p className="text-base whitespace-pre-wrap leading-relaxed" style={{ margin: 0, padding: 0 }}>
+                          {message.role === 'assistant' ? renderMessageWithLinks(message.content) : message.content}
+                        </p>
                         {message.role === 'assistant' && (
                           <p className="text-xs text-gray-500 mt-2" style={{ margin: '8px 0 0 0', padding: 0 }}>
                             {new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })}
@@ -329,14 +332,12 @@ export function ChatWidget() {
                       onKeyPress={handleKeyPress}
                       placeholder="What are your hours?"
                       className="flex-1 bg-white border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-[#7d401b] text-black placeholder-gray-400 px-4 py-2.5 rounded-[10px]"
-                      style={{ fontFamily: 'Lato, sans-serif' }}
                       disabled={isLoading}
                     />
                     <button
                       onClick={handleSendMessage}
                       disabled={isLoading || !inputValue.trim()}
                       className="bg-[#D97642] text-white px-4 py-2.5 rounded-[10px] hover:bg-[#c96836] transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex-shrink-0"
-                      style={{ border: 'none', cursor: isLoading || !inputValue.trim() ? 'not-allowed' : 'pointer' }}
                     >
                       <Send size={18} />
                     </button>

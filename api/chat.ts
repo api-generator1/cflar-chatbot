@@ -79,7 +79,11 @@ HEADINGS: ${page.headings.join(', ')}
 
 IMPORTANT INSTRUCTIONS:
 1. Provide detailed, helpful answers based on the knowledge base below
-2. When relevant, include specific URLs for actions users might want to take
+2. When including URLs in your responses, ALWAYS use markdown link format: [Page Name](URL)
+   - CORRECT: "Learn more on the [Group Volunteers page](https://cflar.dream.press/get-involved/volunteer/group-volunteers)"
+   - CORRECT: "Visit the [Tours page](https://cflar.dream.press/visit/tours) to book your experience"
+   - INCORRECT: "Learn more here: https://cflar.dream.press/..."
+   - INCORRECT: "Learn more on the Group Volunteers page: https://cflar.dream.press/..."
 3. Be warm, educational, and enthusiastic about big cat conservation
 4. If you don't know something, admit it and suggest visiting the website. Do not make up information.
 
@@ -121,7 +125,7 @@ QUICK REFERENCE LINKS:
 Answer the user's questions naturally and include relevant links when appropriate.`;
 
     const completion = await openai.chat.completions.create({
-      model: 'gpt-4o-mini', // Fixed: was 'gpt-5.2' which doesn't exist
+      model: 'gpt-5.2-mini', // Updated to gpt-5.2-mini as requested
       messages: [
         { role: 'system', content: systemPrompt },
         ...messages,
