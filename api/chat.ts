@@ -43,7 +43,7 @@ export default async function handler(
     
     // Debug logging
     console.log('=== CHAT API DEBUG ===');
-    console.log('🤖 Model: gpt-4o-mini (with streaming + caching)');
+    console.log('🤖 Model: gpt-5-mini (with streaming + caching)');
     console.log('Knowledge Base received:', knowledgeBase ? 'YES' : 'NO');
     if (knowledgeBase) {
       try {
@@ -88,8 +88,9 @@ HEADINGS: ${page.headings.join(', ')}
     
     const systemPrompt = `You are a helpful AI website assistant for the Central Florida Animal Reserve (CFLAR), a non-profit big cat reserve in St. Cloud, FL.
 
-CRITICAL FORMATTING RULE - ALWAYS USE MARKDOWN LINKS:
-When mentioning ANY webpage or URL, you MUST use this exact format: [Page Name](URL)
+CRITICAL FORMATTING RULES:
+
+1. ALWAYS USE MARKDOWN LINKS - When mentioning ANY webpage or URL, you MUST use this exact format: [Page Name](URL)
 
 ✅ CORRECT Examples:
 - "Learn more on the [Group Volunteers page](https://cflar.dream.press/get-involved/volunteer/group-volunteers)"
@@ -100,6 +101,17 @@ When mentioning ANY webpage or URL, you MUST use this exact format: [Page Name](
 - "Learn more here: https://cflar.dream.press/..."
 - "Tours page: https://cflar.dream.press/visit/tours"
 - "Sip & Stroll – Spring 2026 https://cflar.dream.press/..."
+
+2. NEVER USE ASTERISKS (*) FOR LISTS - Use numbered lists (1. 2. 3.) or write in paragraph form with natural transitions.
+
+✅ CORRECT Examples:
+- "We offer three tour types: 1. Private Tours, 2. Group Tours, and 3. Photography Tours."
+- "You can get involved by volunteering, donating, or attending our events."
+
+❌ NEVER DO THIS:
+- "* Private Tours"
+- "* Volunteering"
+- "* Donations"
 
 IMPORTANT INSTRUCTIONS:
 1. Provide detailed, helpful answers based on the knowledge base below
@@ -153,7 +165,7 @@ Answer the user's questions naturally and include relevant links when appropriat
     res.setHeader('Connection', 'keep-alive');
     
     const stream = await openai.chat.completions.create({
-      model: 'gpt-4o-mini',
+      model: 'gpt-5-mini',
       messages: [
         { 
           role: 'system', 
@@ -168,8 +180,7 @@ Answer the user's questions naturally and include relevant links when appropriat
         },
         ...messages,
       ],
-      temperature: 0.7,
-      max_tokens: 350, // Reduced from 1000 to 350 for faster responses (~260 words)
+      max_completion_tokens: 350, // GPT-5-mini uses max_completion_tokens instead of max_tokens
       stream: true, // Enable streaming for instant user feedback
       stream_options: {
         include_usage: true, // Get token usage stats including cache info
@@ -224,7 +235,7 @@ Answer the user's questions naturally and include relevant links when appropriat
     
     console.log('');
     console.log('=== PERFORMANCE SUMMARY ===');
-    console.log(`🤖 Model: gpt-4o-mini (streaming + caching)`);
+    console.log(`🤖 Model: gpt-5-mini (streaming + caching)`);
     console.log(`⏱️ KB Parsing: ${kbParseEnd - kbParseStart}ms`);
     console.log(`⏱️ Time to First Chunk: ${firstChunkTime}ms`);
     console.log(`⏱️ Total Streaming Time: ${apiCallEnd - apiCallStart}ms`);
