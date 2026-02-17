@@ -131,7 +131,7 @@ Answer the user's questions naturally and include relevant links when appropriat
         ...messages,
       ],
       temperature: 0.7,
-      max_tokens: 1000, // Increased from 500 to allow more detailed responses with links
+      max_completion_tokens: 1000, // GPT-5 mini uses max_completion_tokens instead of max_tokens
     });
 
     const responseMessage = completion.choices[0]?.message?.content || 'I apologize, but I was unable to generate a response.';
