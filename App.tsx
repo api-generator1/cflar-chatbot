@@ -2,17 +2,27 @@ import { ChatWidget } from './components/ChatWidget';
 import { KnowledgeBaseDebug } from './components/KnowledgeBaseDebug';
 import { SystemPromptViewer } from './components/SystemPromptViewer';
 import { KnowledgeBaseTest } from './components/KnowledgeBaseTest';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 export default function App() {
   const [showTest, setShowTest] = useState(false);
 
-  // Check URL hash for test mode
-  if (window.location.hash === '#test' && !showTest) {
-    setShowTest(true);
-  }
+  // Listen for hash changes
+  useEffect(() => {
+    const checkHash = () => {
+      setShowTest(window.location.hash === '#test');
+    };
+    
+    // Check on mount
+    checkHash();
+    
+    // Listen for hash changes
+    window.addEventListener('hashchange', checkHash);
+    
+    return () => window.removeEventListener('hashchange', checkHash);
+  }, []);
 
-  if (showTest || window.location.hash === '#test') {
+  if (showTest) {
     return <KnowledgeBaseTest />;
   }
 
@@ -67,6 +77,12 @@ export default function App() {
             <p className="text-xs text-blue-700 mt-3">
               💡 If AI gives generic answers, check if knowledge base has 20+ pages loaded
             </p>
+            <a 
+              href="#test" 
+              className="mt-4 inline-block bg-[#7d401b] text-white px-4 py-2 rounded-lg hover:bg-[#8F6A54] transition-colors font-semibold"
+            >
+              🧪 Run Knowledge Base Test
+            </a>
           </div>
           
           <div className="bg-[#fff2dc] border border-[#8F6A54] rounded-lg p-6">
