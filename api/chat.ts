@@ -1,4 +1,4 @@
-// SECURE SERVER-SIDE API ENDPOINT
+// SECURE SERVER-SIDE API ENDPOINT WITH STREAMING & CACHING
 // This runs on the server, so the API key is NEVER exposed to browsers
 
 import type { VercelRequest, VercelResponse } from '@vercel/node';
@@ -43,7 +43,7 @@ export default async function handler(
     
     // Debug logging
     console.log('=== CHAT API DEBUG ===');
-    console.log('🤖 Model: gpt-4o-mini');
+    console.log('🤖 Model: gpt-4o-mini (with streaming + caching)');
     console.log('Knowledge Base received:', knowledgeBase ? 'YES' : 'NO');
     if (knowledgeBase) {
       try {
@@ -145,45 +145,105 @@ Answer the user's questions naturally and include relevant links when appropriat
 
     // ⏱️ OpenAI API call start
     const apiCallStart = Date.now();
-    console.log('⏱️ Starting OpenAI API call...');
+    console.log('⏱️ Starting OpenAI API call with streaming...');
     
-    const completion = await openai.chat.completions.create({
-      model: 'gpt-4o-mini', // Fixed: was 'gpt-5.2' which doesn't exist
+    // Set headers for Server-Sent Events (SSE) streaming
+    res.setHeader('Content-Type', 'text/event-stream');
+    res.setHeader('Cache-Control', 'no-cache');
+    res.setHeader('Connection', 'keep-alive');
+    
+    const stream = await openai.chat.completions.create({
+      model: 'gpt-4o-mini',
       messages: [
-        { role: 'system', content: systemPrompt },
+        { 
+          role: 'system', 
+          content: [
+            {
+              type: 'text',
+              text: systemPrompt,
+              // Enable prompt caching for the knowledge base (saves 50% on input tokens)
+              cache_control: { type: 'ephemeral' }
+            }
+          ] as any
+        },
         ...messages,
       ],
       temperature: 0.7,
-      max_tokens: 1000, // Increased from 500 to allow more detailed responses with links
+      max_tokens: 350, // Reduced from 1000 to 350 for faster responses (~260 words)
+      stream: true, // Enable streaming for instant user feedback
+      stream_options: {
+        include_usage: true, // Get token usage stats including cache info
+      }
     });
 
-    // ⏱️ OpenAI API call complete
+    let fullResponse = '';
+    let firstChunkTime = 0;
+    let chunkCount = 0;
+
+    // Stream the response chunks to the client
+    for await (const chunk of stream) {
+      chunkCount++;
+      
+      // Track time to first chunk (TTFB - Time To First Byte)
+      if (chunkCount === 1) {
+        firstChunkTime = Date.now() - apiCallStart;
+        console.log(`⏱️ Time to First Chunk: ${firstChunkTime}ms`);
+      }
+
+      const content = chunk.choices[0]?.delta?.content || '';
+      if (content) {
+        fullResponse += content;
+        // Send chunk to client as SSE
+        res.write(`data: ${JSON.stringify({ content })}\n\n`);
+      }
+
+      // Check for usage stats in the final chunk
+      if (chunk.usage) {
+        const usage = chunk.usage;
+        console.log('');
+        console.log('=== TOKEN USAGE ===');
+        console.log('Prompt tokens:', usage.prompt_tokens);
+        console.log('Completion tokens:', usage.completion_tokens);
+        console.log('Total tokens:', usage.total_tokens);
+        
+        // Log cache performance
+        if ('prompt_tokens_details' in usage) {
+          const details = (usage as any).prompt_tokens_details;
+          if (details?.cached_tokens) {
+            console.log('🎯 CACHED tokens:', details.cached_tokens);
+            console.log('💰 Cache savings:', Math.round((details.cached_tokens / usage.prompt_tokens) * 100), '%');
+          }
+        }
+        console.log('==================');
+      }
+    }
+
+    // ⏱️ Streaming complete
     const apiCallEnd = Date.now();
-    console.log(`⏱️ OpenAI API Response Time: ${apiCallEnd - apiCallStart}ms`);
-
-    const responseMessage = completion.choices[0]?.message?.content || 'I apologize, but I was unable to generate a response.';
-
-    // ⏱️ Total request time
     const totalTime = Date.now() - startTime;
+    
     console.log('');
     console.log('=== PERFORMANCE SUMMARY ===');
-    console.log(`🤖 Model: gpt-4o-mini`);
+    console.log(`🤖 Model: gpt-4o-mini (streaming + caching)`);
     console.log(`⏱️ KB Parsing: ${kbParseEnd - kbParseStart}ms`);
-    console.log(`⏱️ OpenAI API: ${apiCallEnd - apiCallStart}ms`);
+    console.log(`⏱️ Time to First Chunk: ${firstChunkTime}ms`);
+    console.log(`⏱️ Total Streaming Time: ${apiCallEnd - apiCallStart}ms`);
+    console.log(`⏱️ Total Chunks: ${chunkCount}`);
     console.log(`⏱️ TOTAL TIME: ${totalTime}ms`);
     console.log('==========================');
     console.log('');
 
-    return res.status(200).json({
-      message: responseMessage,
-    });
+    // Send done signal
+    res.write(`data: [DONE]\n\n`);
+    res.end();
 
   } catch (error: any) {
     console.error('OpenAI API Error:', error);
     
-    // Don't expose internal errors to users
-    return res.status(500).json({
-      error: 'Sorry, I encountered an error. Please try again or visit https://cflar.dream.press for assistance.',
-    });
+    // Send error as SSE
+    res.write(`data: ${JSON.stringify({ 
+      error: 'Sorry, I encountered an error. Please try again or visit https://cflar.dream.press for assistance.' 
+    })}\n\n`);
+    res.end();
   }
 }

@@ -9,32 +9,6 @@ interface Message {
   content: string;
 }
 
-// Helper function to convert markdown links [text](url) to HTML
-function renderMessageWithLinks(content: string) {
-  // Replace markdown links [text](url) with HTML links
-  const parts = content.split(/(\[([^\]]+)\]\(([^)]+)\))/g);
-  
-  return parts.map((part, index) => {
-    // Check if this part matches [text](url) pattern
-    const linkMatch = part.match(/\[([^\]]+)\]\(([^)]+)\)/);
-    if (linkMatch) {
-      const [, text, url] = linkMatch;
-      return (
-        <a
-          key={index}
-          href={url}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-blue-600 hover:text-blue-800 underline font-semibold"
-        >
-          {text}
-        </a>
-      );
-    }
-    return <span key={index}>{part}</span>;
-  });
-}
-
 export function ChatWidget() {
   const [isOpen, setIsOpen] = useState(false);
   const [isMinimized, setIsMinimized] = useState(false);
@@ -76,6 +50,16 @@ export function ChatWidget() {
     }
   }, [isOpen, messages.length]);
 
+  // Convert markdown links [text](url) to clickable HTML links
+  const renderMessageContent = (content: string) => {
+    // Replace markdown links with HTML anchor tags
+    const htmlContent = content.replace(
+      /\[([^\]]+)\]\(([^)]+)\)/g,
+      '<a href="$2" target="_blank" rel="noopener noreferrer" style="color: #D97642; text-decoration: underline; font-weight: 500;">$1</a>'
+    );
+    return { __html: htmlContent };
+  };
+
   const handleSendMessage = async () => {
     if (!inputValue.trim() || isLoading) return;
 
@@ -89,7 +73,7 @@ export function ChatWidget() {
     setIsLoading(true);
 
     try {
-      // Call the SECURE server-side API
+      // Call the SECURE server-side API with streaming
       const response = await fetch(API_ENDPOINT, {
         method: 'POST',
         headers: {
@@ -105,16 +89,64 @@ export function ChatWidget() {
         throw new Error('Failed to get response');
       }
 
-      const data = await response.json();
+      // Handle streaming response
+      const reader = response.body?.getReader();
+      const decoder = new TextDecoder();
+      let accumulatedContent = '';
 
-      const assistantMessage: Message = {
-        role: 'assistant',
-        content: data.message,
-      };
+      // Add empty assistant message that we'll update as content streams in
+      const messageIndex = messages.length + 1; // +1 because we already added user message
+      setMessages((prev) => [
+        ...prev,
+        { role: 'assistant', content: '' },
+      ]);
 
-      setMessages((prev) => [...prev, assistantMessage]);
+      if (reader) {
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+
+          const chunk = decoder.decode(value);
+          const lines = chunk.split('\n');
+
+          for (const line of lines) {
+            if (line.startsWith('data: ')) {
+              const data = line.slice(6);
+              
+              if (data === '[DONE]') {
+                break;
+              }
+
+              try {
+                const parsed = JSON.parse(data);
+                
+                if (parsed.content) {
+                  accumulatedContent += parsed.content;
+                  // Update the assistant message in real-time
+                  setMessages((prev) => {
+                    const updated = [...prev];
+                    updated[messageIndex] = {
+                      role: 'assistant',
+                      content: accumulatedContent,
+                    };
+                    return updated;
+                  });
+                }
+
+                if (parsed.error) {
+                  throw new Error(parsed.error);
+                }
+              } catch (e) {
+                // Ignore parsing errors for incomplete chunks
+              }
+            }
+          }
+        }
+      }
+
     } catch (error) {
-      // Fallback mock response for preview environment (silently handle error)
+      console.error('Chat error:', error);
+      // Fallback mock response for preview environment
       const mockResponse = getMockResponse(userMessage.content);
       
       const assistantMessage: Message = {
@@ -147,6 +179,7 @@ export function ChatWidget() {
     setIsLoading(true);
 
     try {
+      // Call the SECURE server-side API with streaming
       const response = await fetch(API_ENDPOINT, {
         method: 'POST',
         headers: {
@@ -162,16 +195,64 @@ export function ChatWidget() {
         throw new Error('Failed to get response');
       }
 
-      const data = await response.json();
+      // Handle streaming response
+      const reader = response.body?.getReader();
+      const decoder = new TextDecoder();
+      let accumulatedContent = '';
 
-      const assistantMessage: Message = {
-        role: 'assistant',
-        content: data.message,
-      };
+      // Add empty assistant message that we'll update as content streams in
+      const messageIndex = messages.length + 1;
+      setMessages((prev) => [
+        ...prev,
+        { role: 'assistant', content: '' },
+      ]);
 
-      setMessages((prev) => [...prev, assistantMessage]);
+      if (reader) {
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+
+          const chunk = decoder.decode(value);
+          const lines = chunk.split('\n');
+
+          for (const line of lines) {
+            if (line.startsWith('data: ')) {
+              const data = line.slice(6);
+              
+              if (data === '[DONE]') {
+                break;
+              }
+
+              try {
+                const parsed = JSON.parse(data);
+                
+                if (parsed.content) {
+                  accumulatedContent += parsed.content;
+                  // Update the assistant message in real-time
+                  setMessages((prev) => {
+                    const updated = [...prev];
+                    updated[messageIndex] = {
+                      role: 'assistant',
+                      content: accumulatedContent,
+                    };
+                    return updated;
+                  });
+                }
+
+                if (parsed.error) {
+                  throw new Error(parsed.error);
+                }
+              } catch (e) {
+                // Ignore parsing errors for incomplete chunks
+              }
+            }
+          }
+        }
+      }
+
     } catch (error) {
-      // Fallback mock response for preview environment (silently handle error)
+      console.error('Chat error:', error);
+      // Fallback mock response for preview environment
       const mockResponse = getMockResponse(userMessage.content);
       
       const assistantMessage: Message = {
@@ -289,10 +370,12 @@ export function ChatWidget() {
                             : 'bg-[#f0f0f0] text-black shadow-sm'
                         }`}
                       >
-                        <p className="text-base whitespace-pre-wrap leading-relaxed" style={{ margin: 0, padding: 0 }}>
-                          {message.role === 'assistant' ? renderMessageWithLinks(message.content) : message.content}
-                        </p>
-                        {message.role === 'assistant' && (
+                        <div 
+                          className="text-base whitespace-pre-wrap leading-relaxed" 
+                          style={{ margin: 0, padding: 0 }}
+                          dangerouslySetInnerHTML={renderMessageContent(message.content)}
+                        />
+                        {message.role === 'assistant' && message.content && (
                           <p className="text-xs text-gray-500 mt-2" style={{ margin: '8px 0 0 0', padding: 0 }}>
                             {new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })}
                           </p>
@@ -355,10 +438,10 @@ export function ChatWidget() {
 // Mock response function for preview environment
 function getMockResponse(question: string): string {
   const mockResponses: { [key: string]: string } = {
-    'What are your hours?': 'Our hours are 10 AM to 5 PM, Monday through Saturday.',
-    'How can I volunteer?': 'You can volunteer by visiting our website and filling out the volunteer form.',
-    'Tell me about upcoming events': 'We have a big cat adoption event next month. Check our events page for details.',
+    'What are your hours?': 'Visit the [Tours page](https://cflar.dream.press/visit/tours) to see our hours and book a tour!',
+    'How can I volunteer?': 'Check out our [Volunteer page](https://cflar.dream.press/get-involved/volunteer) to learn about opportunities.',
+    'Tell me about upcoming events': 'See all upcoming events on our [Events page](https://cflar.dream.press/events). We have exciting activities planned!',
   };
 
-  return mockResponses[question] || "I'm sorry, I don't have a specific answer for that. Please visit our website for more information.";
+  return mockResponses[question] || "I'm sorry, I don't have a specific answer for that. Please visit the [CFLAR website](https://cflar.dream.press) for more information.";
 }
