@@ -13,10 +13,6 @@ export default async function handler(
   req: VercelRequest,
   res: VercelResponse
 ) {
-  // ⏱️ Start total request timer
-const totalTime = Date.now() - startTime;
-console.log(`⏱️ TOTAL TIME: ${totalTime}ms`);
-
   
   // Enable CORS for your WordPress site
   res.setHeader('Access-Control-Allow-Origin', '*');
