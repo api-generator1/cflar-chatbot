@@ -125,7 +125,7 @@ QUICK REFERENCE LINKS:
 Answer the user's questions naturally and include relevant links when appropriate.`;
 
     const completion = await openai.chat.completions.create({
-      model: 'gpt-5.2-mini', // Updated to gpt-5.2-mini as requested
+      model: 'gpt-5-mini-2025-08-07', // Using gpt-5-mini with automatic prompt caching support
       messages: [
         { role: 'system', content: systemPrompt },
         ...messages,
@@ -135,6 +135,24 @@ Answer the user's questions naturally and include relevant links when appropriat
     });
 
     const responseMessage = completion.choices[0]?.message?.content || 'I apologize, but I was unable to generate a response.';
+
+    // Log cache usage for monitoring cost savings
+    const usage = completion.usage;
+    if (usage) {
+      console.log('=== TOKEN USAGE ===');
+      console.log('Prompt tokens:', usage.prompt_tokens);
+      console.log('Completion tokens:', usage.completion_tokens);
+      console.log('Total tokens:', usage.total_tokens);
+      // Cache stats (if available in usage object)
+      if ('prompt_tokens_details' in usage) {
+        const details = (usage as any).prompt_tokens_details;
+        if (details?.cached_tokens) {
+          console.log('🎯 CACHED tokens:', details.cached_tokens);
+          console.log('💰 Cache savings: ~', Math.round((details.cached_tokens / usage.prompt_tokens) * 100), '%');
+        }
+      }
+      console.log('==================');
+    }
 
     return res.status(200).json({
       message: responseMessage,
