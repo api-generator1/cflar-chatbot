@@ -1,8 +1,21 @@
 import { ChatWidget } from './components/ChatWidget';
 import { KnowledgeBaseDebug } from './components/KnowledgeBaseDebug';
 import { SystemPromptViewer } from './components/SystemPromptViewer';
+import { KnowledgeBaseTest } from './components/KnowledgeBaseTest';
+import { useState } from 'react';
 
 export default function App() {
+  const [showTest, setShowTest] = useState(false);
+
+  // Check URL hash for test mode
+  if (window.location.hash === '#test' && !showTest) {
+    setShowTest(true);
+  }
+
+  if (showTest || window.location.hash === '#test') {
+    return <KnowledgeBaseTest />;
+  }
+
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
       <div className="max-w-4xl w-full">
