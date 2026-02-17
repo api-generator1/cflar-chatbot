@@ -121,7 +121,7 @@ QUICK REFERENCE LINKS:
 - About Us: https://cflar.dream.press/about
 - Contact: https://cflar.dream.press/contact-us/
 
-Answer the user's questions naturally and include relevant links when appropriate.`;
+Answer the user's questions naturally and include relevant links when appropriate. Do not include full URL strings, only use page names and link to URL in the page name`;
 
     const completion = await openai.chat.completions.create({
       model: 'gpt-4o-mini', // Fixed: was 'gpt-5.2' which doesn't exist
