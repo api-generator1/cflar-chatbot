@@ -130,7 +130,7 @@ Answer the user's questions naturally and include relevant links when appropriat
         { role: 'system', content: systemPrompt },
         ...messages,
       ],
-      temperature: 0.7,
+      // GPT-5 mini only supports temperature: 1 (default), so we omit it
       max_completion_tokens: 1000, // GPT-5 mini uses max_completion_tokens instead of max_tokens
     });
 
