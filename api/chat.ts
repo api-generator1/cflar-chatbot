@@ -13,6 +13,9 @@ export default async function handler(
   req: VercelRequest,
   res: VercelResponse
 ) {
+  // ⏱️ Start total request timer
+  const startTime = Date.now();
+  
   // Enable CORS for your WordPress site
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
@@ -35,8 +38,12 @@ export default async function handler(
       return res.status(400).json({ error: 'Invalid request: messages required' });
     }
 
+    // ⏱️ KB parsing start
+    const kbParseStart = Date.now();
+    
     // Debug logging
     console.log('=== CHAT API DEBUG ===');
+    console.log('🤖 Model: gpt-4o-mini');
     console.log('Knowledge Base received:', knowledgeBase ? 'YES' : 'NO');
     if (knowledgeBase) {
       try {
@@ -75,16 +82,29 @@ HEADINGS: ${page.headings.join(', ')}
       }
     }
     
+    // ⏱️ KB parsing complete
+    const kbParseEnd = Date.now();
+    console.log(`⏱️ KB Parsing Time: ${kbParseEnd - kbParseStart}ms`);
+    
     const systemPrompt = `You are a helpful AI website assistant for the Central Florida Animal Reserve (CFLAR), a non-profit big cat reserve in St. Cloud, FL.
+
+CRITICAL FORMATTING RULE - ALWAYS USE MARKDOWN LINKS:
+When mentioning ANY webpage or URL, you MUST use this exact format: [Page Name](URL)
+
+✅ CORRECT Examples:
+- "Learn more on the [Group Volunteers page](https://cflar.dream.press/get-involved/volunteer/group-volunteers)"
+- "Visit the [Tours page](https://cflar.dream.press/visit/tours) to book"
+- "Check out [Sip & Stroll – Spring 2026](https://cflar.dream.press/event/sip-and-stroll-spring-2026) for tickets"
+
+❌ NEVER DO THIS:
+- "Learn more here: https://cflar.dream.press/..."
+- "Tours page: https://cflar.dream.press/visit/tours"
+- "Sip & Stroll – Spring 2026 https://cflar.dream.press/..."
 
 IMPORTANT INSTRUCTIONS:
 1. Provide detailed, helpful answers based on the knowledge base below
-2. When including URLs in your responses, format them using the page title instead of generic words like "here" or "this link"
-   - CORRECT: "Learn more on the Group Volunteers page: https://cflar.dream.press/get-involved/volunteer/group-volunteers"
-   - CORRECT: "Visit the Tours page (https://cflar.dream.press/visit/tours) to book your experience"
-   - INCORRECT: "Learn more [here](https://cflar.dream.press/...)"
-3. Be warm, educational, and enthusiastic about big cat conservation
-4. If you don't know something, admit it and suggest visiting the website. Do not make up information.
+2. Be warm, educational, and enthusiastic about big cat conservation
+3. If you don't know something, admit it and suggest visiting the website. Do not make up information.
 
 BRAND VOICE & TERMINOLOGY GUIDELINES:
 - The space where our animals reside are called enclosures or yards NEVER cages.
@@ -123,6 +143,10 @@ QUICK REFERENCE LINKS:
 
 Answer the user's questions naturally and include relevant links when appropriate. Do not include full URL strings, only use page names and link to URL in the page name`;
 
+    // ⏱️ OpenAI API call start
+    const apiCallStart = Date.now();
+    console.log('⏱️ Starting OpenAI API call...');
+    
     const completion = await openai.chat.completions.create({
       model: 'gpt-4o-mini', // Fixed: was 'gpt-5.2' which doesn't exist
       messages: [
@@ -133,7 +157,22 @@ Answer the user's questions naturally and include relevant links when appropriat
       max_tokens: 1000, // Increased from 500 to allow more detailed responses with links
     });
 
+    // ⏱️ OpenAI API call complete
+    const apiCallEnd = Date.now();
+    console.log(`⏱️ OpenAI API Response Time: ${apiCallEnd - apiCallStart}ms`);
+
     const responseMessage = completion.choices[0]?.message?.content || 'I apologize, but I was unable to generate a response.';
+
+    // ⏱️ Total request time
+    const totalTime = Date.now() - startTime;
+    console.log('');
+    console.log('=== PERFORMANCE SUMMARY ===');
+    console.log(`🤖 Model: gpt-4o-mini`);
+    console.log(`⏱️ KB Parsing: ${kbParseEnd - kbParseStart}ms`);
+    console.log(`⏱️ OpenAI API: ${apiCallEnd - apiCallStart}ms`);
+    console.log(`⏱️ TOTAL TIME: ${totalTime}ms`);
+    console.log('==========================');
+    console.log('');
 
     return res.status(200).json({
       message: responseMessage,
