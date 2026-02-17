@@ -205,7 +205,9 @@ Answer the user's questions naturally and include relevant links when appropriat
       if (content) {
         fullResponse += content;
         // Send chunk to client as SSE
-        res.write(`data: ${JSON.stringify({ content })}\n\n`);
+        const payload = JSON.stringify({ content });
+        console.log(`📤 Sending chunk ${chunkCount}:`, payload.substring(0, 100) + '...');
+        res.write(`data: ${payload}\n\n`);
       }
 
       // Check for usage stats in the final chunk
@@ -245,11 +247,20 @@ Answer the user's questions naturally and include relevant links when appropriat
     console.log('');
 
     // Send done signal
+    console.log('📤 Sending [DONE] signal');
+    console.log('📊 Full response length:', fullResponse.length);
+    console.log('📝 Full response preview:', fullResponse.substring(0, 200));
     res.write(`data: [DONE]\n\n`);
     res.end();
 
   } catch (error: any) {
     console.error('OpenAI API Error:', error);
+    console.error('Error details:', {
+      message: error.message,
+      status: error.status,
+      code: error.code,
+      type: error.type,
+    });
     
     // Send error as SSE
     res.write(`data: ${JSON.stringify({ 

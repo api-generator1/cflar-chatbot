@@ -73,6 +73,9 @@ export function ChatWidget() {
     setIsLoading(true);
 
     try {
+      console.log('🚀 Starting API call to:', API_ENDPOINT);
+      console.log('📨 Sending messages:', messages.length + 1, 'total');
+      
       // Call the SECURE server-side API with streaming
       const response = await fetch(API_ENDPOINT, {
         method: 'POST',
@@ -89,6 +92,8 @@ export function ChatWidget() {
         throw new Error('Failed to get response');
       }
 
+      console.log('📡 Response received, starting stream...');
+
       // Handle streaming response
       const reader = response.body?.getReader();
       const decoder = new TextDecoder();
@@ -104,9 +109,13 @@ export function ChatWidget() {
       if (reader) {
         while (true) {
           const { done, value } = await reader.read();
-          if (done) break;
+          if (done) {
+            console.log('✅ Stream complete. Final content length:', accumulatedContent.length);
+            break;
+          }
 
           const chunk = decoder.decode(value);
+          console.log('📦 Chunk received:', chunk);
           const lines = chunk.split('\n');
 
           for (const line of lines) {
@@ -114,14 +123,17 @@ export function ChatWidget() {
               const data = line.slice(6);
               
               if (data === '[DONE]') {
+                console.log('🏁 [DONE] signal received');
                 break;
               }
 
               try {
                 const parsed = JSON.parse(data);
+                console.log('✨ Parsed data:', parsed);
                 
                 if (parsed.content) {
                   accumulatedContent += parsed.content;
+                  console.log('📝 Accumulated content:', accumulatedContent);
                   // Update the assistant message in real-time
                   setMessages((prev) => {
                     const updated = [...prev];
@@ -134,10 +146,12 @@ export function ChatWidget() {
                 }
 
                 if (parsed.error) {
+                  console.error('❌ API error:', parsed.error);
                   throw new Error(parsed.error);
                 }
               } catch (e) {
                 // Ignore parsing errors for incomplete chunks
+                console.log('⚠️ Parsing error (expected for incomplete chunks):', e);
               }
             }
           }
@@ -195,6 +209,8 @@ export function ChatWidget() {
         throw new Error('Failed to get response');
       }
 
+      console.log('📡 Response received, starting stream...');
+
       // Handle streaming response
       const reader = response.body?.getReader();
       const decoder = new TextDecoder();
@@ -210,9 +226,13 @@ export function ChatWidget() {
       if (reader) {
         while (true) {
           const { done, value } = await reader.read();
-          if (done) break;
+          if (done) {
+            console.log('✅ Stream complete. Final content length:', accumulatedContent.length);
+            break;
+          }
 
           const chunk = decoder.decode(value);
+          console.log('📦 Chunk received:', chunk);
           const lines = chunk.split('\n');
 
           for (const line of lines) {
@@ -220,14 +240,17 @@ export function ChatWidget() {
               const data = line.slice(6);
               
               if (data === '[DONE]') {
+                console.log('🏁 [DONE] signal received');
                 break;
               }
 
               try {
                 const parsed = JSON.parse(data);
+                console.log('✨ Parsed data:', parsed);
                 
                 if (parsed.content) {
                   accumulatedContent += parsed.content;
+                  console.log('📝 Accumulated content:', accumulatedContent);
                   // Update the assistant message in real-time
                   setMessages((prev) => {
                     const updated = [...prev];
@@ -240,10 +263,12 @@ export function ChatWidget() {
                 }
 
                 if (parsed.error) {
+                  console.error('❌ API error:', parsed.error);
                   throw new Error(parsed.error);
                 }
               } catch (e) {
                 // Ignore parsing errors for incomplete chunks
+                console.log('⚠️ Parsing error (expected for incomplete chunks):', e);
               }
             }
           }
