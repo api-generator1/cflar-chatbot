@@ -41,3 +41,74 @@ body {
   letter-spacing: normal;
   text-transform: none;
 }
+
+/* ---------------------------
+   Prevent WP theme bleed-through
+   Scope everything to the widget root
+---------------------------- */
+
+/* Lock base text styling */
+#cflar-chatbot-root {
+  font-family: 'Lato', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
+    Ubuntu, Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  color: #111827; /* near-black */
+  font-size: 16px;
+  line-height: 1.4;
+}
+
+/* Ensure everything inherits the widget font */
+#cflar-chatbot-root * {
+  font-family: inherit;
+  box-sizing: border-box;
+}
+
+/* Reset theme button styling (blue backgrounds, weird radius, borders) */
+#cflar-chatbot-root button {
+  background: none;
+  border: none;
+  border-radius: 0;
+  padding: 0;
+  margin: 0;
+  color: inherit;
+  font: inherit;
+  letter-spacing: normal;
+  text-transform: none;
+  box-shadow: none;
+  background-image: none;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+/* Restore expected button behavior */
+#cflar-chatbot-root button {
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Inputs should not inherit WP styles */
+#cflar-chatbot-root input,
+#cflar-chatbot-root textarea {
+  font: inherit;
+  color: inherit;
+  letter-spacing: normal;
+  text-transform: none;
+  box-shadow: none;
+  background-image: none;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+/* Ensure header title always looks right */
+#cflar-chatbot-root h1,
+#cflar-chatbot-root h2,
+#cflar-chatbot-root h3,
+#cflar-chatbot-root h4,
+#cflar-chatbot-root h5,
+#cflar-chatbot-root h6 {
+  font-family: inherit;
+  font-weight: inherit;
+  color: inherit;
+  margin: 0;
+}
