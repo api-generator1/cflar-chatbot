@@ -4,7 +4,7 @@
 export const knowledgeBase = {
   "lastUpdated": "2026-02-16T18:58:26.098Z",
   "baseUrl": "https://cflar.dream.press",
-  "pageCount": 43,
+  "pageCount": 24,
   "pages": [
     {
       "url": "https://cflar.dream.press/",
