@@ -28,3 +28,16 @@ body {
 #cflar-chatbot-root .cflar-chat-link:hover {
   color: var(--color-cflar-send-hover);
 }
+
+#cflar-chatbot-root,
+#cflar-chatbot-root * {
+  box-sizing: border-box;
+}
+
+#cflar-chatbot-root button,
+#cflar-chatbot-root input,
+#cflar-chatbot-root textarea {
+  font: inherit;
+  letter-spacing: normal;
+  text-transform: none;
+}

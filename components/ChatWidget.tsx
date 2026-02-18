@@ -56,11 +56,16 @@ export function ChatWidget() {
     }
   }, [isOpen, messages.length]);
 
-  // Convert markdown links [text](url) to clickable HTML links
- const htmlContent = content.replace(
-  /\[([^\]]+)\]\(([^)]+)\)/g,
-  '<a href="$2" target="_blank" rel="noopener noreferrer" class="cflar-chat-link">$1</a>'
-);
+// Convert markdown links [text](url) to clickable HTML links
+const renderMessageContent = (content: string) => {
+  const htmlContent = content.replace(
+    /\[([^\]]+)\]\(([^)]+)\)/g,
+    '<a href="$2" target="_blank" rel="noopener noreferrer" class="cflar-chat-link">$1</a>'
+  );
+
+ return { __html: htmlContent };
+
+
 
     return { __html: htmlContent };
   };
@@ -438,7 +443,7 @@ export function ChatWidget() {
       </AnimatePresence>
     </div>
   );
-
+}
 
 // Mock response function for preview environment
 function getMockResponse(question: string): string {
