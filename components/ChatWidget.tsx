@@ -438,7 +438,7 @@ export function ChatWidget() {
       </AnimatePresence>
     </div>
   );
-}
+
 
 // Mock response function for preview environment
 function getMockResponse(question: string): string {
