@@ -423,13 +423,13 @@ export function ChatWidget() {
                       disabled={isLoading}
                     />
                     <button
-                      onClick={handleSendMessage}
-                      disabled={isLoading || !inputValue.trim()}
-                      className="!bg-cflar-send text-white h-[42px] w-[42px] rounded-[10px] hover:!bg-cflar-send-hover transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center flex-shrink-0"
+  onClick={handleSendMessage}
+  disabled={isLoading || !inputValue.trim()}
+  className="!bg-cflar-send hover:!bg-cflar-send-hover h-[42px] w-[42px] rounded-[10px] flex items-center justify-center flex-shrink-0 disabled:opacity-50 disabled:cursor-not-allowed"
+>
+  <Send size={18} className="text-white" />
+</button>
 
-                    >
-                      <Send size={18} />
-                    </button>
                   </div>
                 </div>
               </>
