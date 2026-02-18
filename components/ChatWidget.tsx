@@ -314,7 +314,7 @@ const renderMessageContent = (content: string) => {
             <div className="bg-cflar-brown text-white px-6 py-4 flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <Sparkles size={20} />
-                <h3 className="font-semibold text-lg">CFAR Assistant</h3>
+                <h3 className="font-semibold text-lg text-white">CFAR Assistant</h3>
               </div>
               <div className="flex gap-2">
                 <button
