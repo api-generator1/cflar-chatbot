@@ -425,11 +425,20 @@ export function ChatWidget() {
                     <button
   onClick={handleSendMessage}
   disabled={isLoading || !inputValue.trim()}
-  className="bg-cflar-send h-[42px] w-[42px] flex items-center justify-center rounded-[10px] border-2 border-red-500"
-
+  style={{
+    height: 42,
+    width: 42,
+    borderRadius: 10,
+    border: '2px solid red',
+    background: '#D97642',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  }}
 >
-  <Send size={16} className="stroke-white" />
+  <Send size={16} color="#fff" style={{ display: 'block' }} />
 </button>
+
 
                   </div>
                 </div>
