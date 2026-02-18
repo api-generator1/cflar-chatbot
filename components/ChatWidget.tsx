@@ -57,12 +57,11 @@ export function ChatWidget() {
   }, [isOpen, messages.length]);
 
   // Convert markdown links [text](url) to clickable HTML links
-  const renderMessageContent = (content: string) => {
-    // Replace markdown links with HTML anchor tags
-    const htmlContent = content.replace(
-      /\[([^\]]+)\]\(([^)]+)\)/g,
-      '<a href="$2" target="_blank" rel="noopener noreferrer" style="color: #D97642; text-decoration: underline; font-weight: 500;">$1</a>'
-    );
+ const htmlContent = content.replace(
+  /\[([^\]]+)\]\(([^)]+)\)/g,
+  '<a href="$2" target="_blank" rel="noopener noreferrer" class="cflar-chat-link">$1</a>'
+);
+
     return { __html: htmlContent };
   };
 
@@ -284,7 +283,7 @@ export function ChatWidget() {
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => setIsOpen(true)}
-            className="fixed bottom-6 right-6 bg-[#7d401b] text-white rounded-full p-4 shadow-lg hover:bg-[#8F6A54] transition-colors z-50"
+            className="fixed bottom-6 right-6 bg-cflar-brown text-white rounded-full p-4 shadow-lg hover:bg-cflar-brown-hover transition-colors z-50"
           >
             <MessageCircle size={28} />
           </motion.button>
@@ -304,10 +303,10 @@ export function ChatWidget() {
             }}
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
             transition={{ duration: 0.2 }}
-            className="fixed bottom-6 right-6 w-[400px] bg-[#fff2dc] rounded-2xl shadow-2xl flex flex-col overflow-hidden z-50"
+            className="fixed bottom-6 right-6 w-[400px] bg-cflar-cream rounded-2xl shadow-2xl flex flex-col overflow-hidden z-50"
           >
             {/* Header */}
-            <div className="bg-[#7d401b] text-white px-6 py-4 flex items-center justify-between">
+            <div className="bg-cflar-brown text-white px-6 py-4 flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <Sparkles size={20} />
                 <h3 className="font-semibold text-lg">CFAR Assistant</h3>
@@ -315,13 +314,13 @@ export function ChatWidget() {
               <div className="flex gap-2">
                 <button
                   onClick={() => setIsMinimized(!isMinimized)}
-                  className="hover:bg-[#8F6A54] p-1 rounded transition-colors"
+                  className="hover:bg-cflar-brown-hover p-1 rounded transition-colors"
                 >
                   {isMinimized ? <Maximize2 size={20} /> : <Minimize2 size={20} />}
                 </button>
                 <button
                   onClick={() => setIsOpen(false)}
-                  className="hover:bg-[#8F6A54] p-1 rounded transition-colors"
+                  className="hover:bg-cflar-brown-hover p-1 rounded transition-colors"
                 >
                   <X size={20} />
                 </button>
@@ -336,19 +335,19 @@ export function ChatWidget() {
                   <div className="flex gap-2 justify-center">
                     <button
                       onClick={() => sendQuickAction('What are your hours?')}
-                      className="border-2 border-[#7d401b] text-[#7d401b] bg-[#fff2dc] hover:bg-[#7d401b] hover:text-white py-2 px-4 rounded-full text-sm font-semibold transition-colors uppercase"
+                      className="border-2 border-cflar-brown text-cflar-brown bg-cflar-cream hover:bg-cflar-brown hover:text-white py-2 px-4 rounded-full text-sm font-semibold transition-colors uppercase"
                     >
                       HOURS
                     </button>
                     <button
                       onClick={() => sendQuickAction('How can I volunteer?')}
-                      className="border-2 border-[#7d401b] text-[#7d401b] bg-[#fff2dc] hover:bg-[#7d401b] hover:text-white py-2 px-4 rounded-full text-sm font-semibold transition-colors uppercase"
+                      className="border-2 border-cflar-brown text-cflar-brown bg-cflar-cream hover:bg-cflar-brown hover:text-white py-2 px-4 rounded-full text-sm font-semibold transition-colors uppercase"
                     >
                       VOLUNTEER
                     </button>
                     <button
                       onClick={() => sendQuickAction('Tell me about upcoming events')}
-                      className="border-2 border-[#7d401b] text-[#7d401b] bg-[#fff2dc] hover:bg-[#7d401b] hover:text-white py-2 px-4 rounded-full text-sm font-semibold transition-colors uppercase"
+                      className="border-2 border-cflar-brown text-cflar-brown bg-cflar-cream hover:bg-cflar-brown hover:text-white py-2 px-4 rounded-full text-sm font-semibold transition-colors uppercase"
                     >
                       EVENTS
                     </button>
@@ -365,15 +364,15 @@ export function ChatWidget() {
                       }`}
                     >
                       {message.role === 'assistant' && (
-                        <div className="flex-shrink-0 w-8 h-8 rounded-full bg-[#fff2dc] flex items-center justify-center text-lg mt-1">
+                        <div className="flex-shrink-0 w-8 h-8 rounded-full bg-cflar-cream flex items-center justify-center text-lg mt-1">
                           🐾
                         </div>
                       )}
                       <div
                         className={`max-w-[75%] rounded-2xl px-4 py-3 ${
                           message.role === 'user'
-                            ? 'bg-[#7d401b] text-white'
-                            : 'bg-[#f0f0f0] text-black shadow-sm'
+                            ? 'bg-cflar-brown text-white'
+                            : 'bg-cflar-bubble text-black shadow-sm'
                         }`}
                       >
                         <div 
@@ -388,7 +387,7 @@ export function ChatWidget() {
                         )}
                       </div>
                       {message.role === 'user' && (
-                        <div className="flex-shrink-0 w-8 h-8 rounded-full bg-[#7d401b] flex items-center justify-center text-white mt-1">
+                        <div className="flex-shrink-0 w-8 h-8 rounded-full bg-cflar-brown flex items-center justify-center text-white mt-1">
                           <User size={18} />
                         </div>
                       )}
@@ -396,14 +395,14 @@ export function ChatWidget() {
                   ))}
                   {isLoading && (
                     <div className="flex items-start gap-2">
-                      <div className="flex-shrink-0 w-8 h-8 rounded-full bg-[#fff2dc] flex items-center justify-center text-lg">
+                      <div className="flex-shrink-0 w-8 h-8 rounded-full bg-cflar-cream flex items-center justify-center text-lg">
                         🐾
                       </div>
-                      <div className="bg-[#f0f0f0] shadow-sm rounded-2xl px-4 py-3">
+                      <div className="bg-cflar-bubble shadow-sm rounded-2xl px-4 py-3">
                         <div className="flex gap-1">
-                          <div className="w-2 h-2 bg-[#8F6A54] rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-                          <div className="w-2 h-2 bg-[#8F6A54] rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-                          <div className="w-2 h-2 bg-[#8F6A54] rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+                          <div className="w-2 h-2 bg-cflar-brown-hover rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+                          <div className="w-2 h-2 bg-cflar-brown-hover rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+                          <div className="w-2 h-2 bg-cflar-brown-hover rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
                         </div>
                       </div>
                     </div>
@@ -412,7 +411,7 @@ export function ChatWidget() {
                 </div>
 
                 {/* Input */}
-                <div className="px-4 py-4 bg-[#f5f5f5]">
+                <div className="px-4 py-4 bg-gray-100">
                   <div className="flex gap-3 items-center">
                     <input
                       type="text"
@@ -420,13 +419,13 @@ export function ChatWidget() {
                       onChange={(e) => setInputValue(e.target.value)}
                       onKeyPress={handleKeyPress}
                       placeholder="What are your hours?"
-                      className="flex-1 bg-white border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-[#7d401b] text-black placeholder-gray-400 px-4 py-2.5 rounded-[10px]"
+                      className="flex-1 bg-white border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-cflar-brown text-black placeholder-gray-400 px-4 py-2.5 rounded-[10px]"
                       disabled={isLoading}
                     />
                     <button
                       onClick={handleSendMessage}
                       disabled={isLoading || !inputValue.trim()}
-                      className="bg-[#D97642] text-white px-4 py-2.5 rounded-[10px] hover:bg-[#c96836] transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex-shrink-0"
+                      className="bg-cflar-send text-white px-4 py-2.5 rounded-[10px] hover:bg-cflar-send-hover transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex-shrink-0"
                     >
                       <Send size={18} />
                     </button>
