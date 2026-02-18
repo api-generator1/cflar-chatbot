@@ -197,9 +197,9 @@ body {
 
 /* Quick action pills: force padding + font size so WP can't change it */
 #cflar-chatbot-root .cflar-quick {
-  padding: 6px 16px !important;       /* smaller pill height */
-  font-weight: 700 !important;
-  font-size: 12px !important;         /* tighter like intended */
+  padding: 8px 16px !important;       /* smaller pill height */
+  font-weight: 600 !important;
+  font-size: 14px !important;         /* tighter like intended */
   letter-spacing: 0.08em !important;  /* nicer uppercase */
   background-color: var(--color-cflar-cream) !important;
   border-color: var(--color-cflar-brown) !important;
