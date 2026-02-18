@@ -34,14 +34,6 @@ body {
   box-sizing: border-box;
 }
 
-#cflar-chatbot-root button,
-#cflar-chatbot-root input,
-#cflar-chatbot-root textarea {
-  font: inherit;
-  letter-spacing: normal;
-  text-transform: none;
-}
-
 /* ---------------------------
    Prevent WP theme bleed-through
    Scope everything to the widget root
@@ -61,31 +53,54 @@ body {
   font-family: inherit;
   box-sizing: border-box;
 }
+/* ---------------------------
+   WP theme bleed guard (safe)
+   Uses :where() so Tailwind utilities can still style buttons
+---------------------------- */
 
-/* Reset theme button styling (blue backgrounds, weird radius, borders) */
-#cflar-chatbot-root button {
-  background: none;
-  border: none;
-  border-radius: 0;
-  padding: 0;
-  margin: 0;
-  color: inherit;
+:where(#cflar-chatbot-root) {
+  font-family: 'Lato', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
+    Ubuntu, Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  color: #111827;
+  font-size: 16px;
+  line-height: 1.4;
+}
+
+:where(#cflar-chatbot-root),
+:where(#cflar-chatbot-root) * {
+  box-sizing: border-box;
+}
+
+/* Keep typography consistent, but DO NOT reset background/border/radius/padding */
+:where(#cflar-chatbot-root) button,
+:where(#cflar-chatbot-root) input,
+:where(#cflar-chatbot-root) textarea {
   font: inherit;
   letter-spacing: normal;
   text-transform: none;
-  box-shadow: none;
-  background-image: none;
-  appearance: none;
-  -webkit-appearance: none;
 }
 
-/* Restore expected button behavior */
-#cflar-chatbot-root button {
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+/* Prevent WP "blue button" backgrounds without breaking Tailwind */
+:where(#cflar-chatbot-root) button {
+  background-image: none;
+  box-shadow: none;
 }
+
+/* If WP is forcing a blue background with !important, this wins inside the widget */
+:where(#cflar-chatbot-root) button:not([class*="bg-"]) {
+  background-color: transparent;
+}
+
+/* Headings: remove theme margins that cause layout shifts */
+:where(#cflar-chatbot-root) h1,
+:where(#cflar-chatbot-root) h2,
+:where(#cflar-chatbot-root) h3,
+:where(#cflar-chatbot-root) h4,
+:where(#cflar-chatbot-root) h5,
+:where(#cflar-chatbot-root) h6 {
+  margin: 0;
+}
+
 
 /* Inputs should not inherit WP styles */
 #cflar-chatbot-root input,
