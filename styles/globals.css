@@ -184,6 +184,11 @@ body {
   letter-spacing: 0.02em !important;
 }
 
+#cflar-chatbot-root svg {
+  stroke: currentColor !important;
+  fill: none !important;
+}
+
 /* Header icon buttons: keep compact, no WP blue background */
 #cflar-chatbot-root .cflar-iconbtn {
   padding: 6px !important;
