@@ -280,7 +280,7 @@ export function ChatWidget() {
             <div className="bg-cflar-brown text-white px-6 py-4 flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <Sparkles size={20} />
-                <div className="font-semibold text-base text-white leading-none tracking-wide">
+                <div className="font-semibold text-lg text-white leading-none tracking-wide">
                   CFAR Assistant
                 </div>
               </div>
@@ -308,19 +308,19 @@ export function ChatWidget() {
                   <div className="flex gap-2 justify-center">
                     <button
                       onClick={() => sendQuickAction('What are your hours?')}
-                      className="!border-2 !border-cflar-brown !text-cflar-brown !bg-cflar-cream hover:!bg-cflar-brown hover:!text-white py-2 px-6 !rounded-full text-sm font-semibold transition-colors uppercase"
+                      className="!border-2 !border-cflar-brown !text-cflar-brown !bg-cflar-cream hover:!bg-cflar-brown hover:!text-white py-1.5 px-5 !rounded-full text-xs font-semibold tracking-[0.08em] transition-colors uppercase"
                     >
                       HOURS
                     </button>
                     <button
                       onClick={() => sendQuickAction('How can I volunteer?')}
-                      className="!border-2 !border-cflar-brown !text-cflar-brown !bg-cflar-cream hover:!bg-cflar-brown hover:!text-white py-2 px-6 !rounded-full text-sm font-semibold transition-colors uppercase"
+                      className="!border-2 !border-cflar-brown !text-cflar-brown !bg-cflar-cream hover:!bg-cflar-brown hover:!text-white py-1.5 px-5 !rounded-full text-xs font-semibold tracking-[0.08em] transition-colors uppercase"
                     >
                       VOLUNTEER
                     </button>
                     <button
                       onClick={() => sendQuickAction('Tell me about upcoming events')}
-                      className="!border-2 !border-cflar-brown !text-cflar-brown !bg-cflar-cream hover:!bg-cflar-brown hover:!text-white py-2 px-6 !rounded-full text-sm font-semibold transition-colors uppercase"
+                      className="!border-2 !border-cflar-brown !text-cflar-brown !bg-cflar-cream hover:!bg-cflar-brown hover:!text-white py-1.5 px-5 !rounded-full text-xs font-semibold tracking-[0.08em] transition-colors uppercase"
                     >
                       EVENTS
                     </button>
