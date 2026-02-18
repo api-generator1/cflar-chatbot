@@ -277,24 +277,27 @@ export function ChatWidget() {
             className="fixed bottom-6 right-6 w-[400px] bg-cflar-cream rounded-2xl shadow-2xl flex flex-col overflow-hidden z-50"
           >
             {/* Header */}
-            <div className="bg-cflar-brown text-white px-6 py-4 flex items-center justify-between">
+            <div className="cflar-header bg-cflar-brown text-white flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <Sparkles size={20} />
-                <div className="font-semibold text-lg text-white leading-none tracking-wide">
-                  CFAR Assistant
-                </div>
+                <div className="cflar-title font-semibold text-lg text-white leading-none tracking-wide">
+  CFAR Assistant
+</div>
+
               </div>
 
               <div className="flex gap-2">
                 <button
                   onClick={() => setIsMinimized(!isMinimized)}
-                  className="!bg-transparent hover:!bg-cflar-brown-hover p-1 rounded transition-colors"
+                  className="cflar-iconbtn !bg-transparent hover:!bg-cflar-brown-hover rounded transition-colors"
+
                 >
                   {isMinimized ? <Maximize2 size={20} /> : <Minimize2 size={20} />}
                 </button>
                 <button
                   onClick={() => setIsOpen(false)}
-                  className="!bg-transparent hover:!bg-cflar-brown-hover p-1 rounded transition-colors"
+                  className="cflar-iconbtn !bg-transparent hover:!bg-cflar-brown-hover rounded transition-colors"
+
                 >
                   <X size={20} />
                 </button>
@@ -304,23 +307,27 @@ export function ChatWidget() {
             {!isMinimized && (
               <>
                 {/* Action Buttons */}
-                <div className="px-4 pt-4 pb-3">
+                <div className="cflar-subheader">
+
                   <div className="flex gap-2 justify-center">
                     <button
                       onClick={() => sendQuickAction('What are your hours?')}
-                      className="!border-2 !border-cflar-brown !text-cflar-brown !bg-cflar-cream hover:!bg-cflar-brown hover:!text-white py-1.5 px-5 !rounded-full text-xs font-semibold tracking-[0.08em] transition-colors uppercase"
+                      className="cflar-quick !border-2 !border-cflar-brown !text-cflar-brown !bg-cflar-cream hover:!bg-cflar-brown hover:!text-white !rounded-full font-semibold transition-colors uppercase"
+
                     >
                       HOURS
                     </button>
                     <button
                       onClick={() => sendQuickAction('How can I volunteer?')}
-                      className="!border-2 !border-cflar-brown !text-cflar-brown !bg-cflar-cream hover:!bg-cflar-brown hover:!text-white py-1.5 px-5 !rounded-full text-xs font-semibold tracking-[0.08em] transition-colors uppercase"
+                      className="cflar-quick !border-2 !border-cflar-brown !text-cflar-brown !bg-cflar-cream hover:!bg-cflar-brown hover:!text-white !rounded-full font-semibold transition-colors uppercase"
+
                     >
                       VOLUNTEER
                     </button>
                     <button
                       onClick={() => sendQuickAction('Tell me about upcoming events')}
-                      className="!border-2 !border-cflar-brown !text-cflar-brown !bg-cflar-cream hover:!bg-cflar-brown hover:!text-white py-1.5 px-5 !rounded-full text-xs font-semibold tracking-[0.08em] transition-colors uppercase"
+                      className="cflar-quick !border-2 !border-cflar-brown !text-cflar-brown !bg-cflar-cream hover:!bg-cflar-brown hover:!text-white !rounded-full font-semibold transition-colors uppercase"
+
                     >
                       EVENTS
                     </button>
