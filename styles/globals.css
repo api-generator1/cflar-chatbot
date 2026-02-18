@@ -2,11 +2,6 @@
 
 @import "tailwindcss";
 
-/* Tell Tailwind to scan these files for classNames */
-@source "../src/**/*.{js,ts,jsx,tsx}";
-@source "../components/**/*.{js,ts,jsx,tsx}";
-
-
 @theme {
   --color-cflar-brown: #7d401b;
   --color-cflar-brown-hover: #8F6A54;
@@ -226,14 +221,4 @@ body {
 #cflar-chatbot-root .cflar-quick:hover {
   background-color: var(--color-cflar-brown) !important;
   color: #fff !important;
-}
-
-/* Make sure Lucide icons are visible inside the widget (WP themes sometimes hide SVGs) */
-#cflar-chatbot-root svg.lucide {
-  display: block !important;
-  visibility: visible !important;
-  opacity: 1 !important;
-
-  stroke: #ffffff !important;
-  fill: none !important;
 }
