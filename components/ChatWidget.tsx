@@ -30,11 +30,10 @@ export function ChatWidget() {
   }, []);
 
   // Get API endpoint - use absolute URL when embedded, relative when in preview
-  const isEmbedded = !window.location.hostname.includes('vercel.app') && 
-                     !window.location.hostname.includes('localhost');
-  const API_ENDPOINT = isEmbedded 
-    ? 'https://cflar-chatbot.vercel.app/api/chat'
-    : '/api/chat';
+  const isEmbedded =
+    !window.location.hostname.includes('vercel.app') &&
+    !window.location.hostname.includes('localhost');
+  const API_ENDPOINT = isEmbedded ? 'https://cflar-chatbot.vercel.app/api/chat' : '/api/chat';
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -50,22 +49,19 @@ export function ChatWidget() {
       setMessages([
         {
           role: 'assistant',
-          content: "Hi! 🐾 Welcome to CFAR - the Central Florida Animal Reserve. I'm an AI helper, here to answer questions about our big cat reserve, visiting, tours, residents, and more. How can I help you today?",
+          content:
+            "Hi! 🐾 Welcome to CFAR - the Central Florida Animal Reserve. I'm an AI helper, here to answer questions about our big cat reserve, visiting, tours, residents, and more. How can I help you today?",
         },
       ]);
     }
   }, [isOpen, messages.length]);
 
-// Convert markdown links [text](url) to clickable HTML links
-const renderMessageContent = (content: string) => {
-  const htmlContent = content.replace(
-    /\[([^\]]+)\]\(([^)]+)\)/g,
-    '<a href="$2" target="_blank" rel="noopener noreferrer" class="cflar-chat-link">$1</a>'
-  );
-
- return { __html: htmlContent };
-
-
+  // Convert markdown links [text](url) to clickable HTML links
+  const renderMessageContent = (content: string) => {
+    const htmlContent = content.replace(
+      /\[([^\]]+)\]\(([^)]+)\)/g,
+      '<a href="$2" target="_blank" rel="noopener noreferrer" class="cflar-chat-link">$1</a>'
+    );
 
     return { __html: htmlContent };
   };
@@ -86,18 +82,14 @@ const renderMessageContent = (content: string) => {
       // Call the SECURE server-side API with streaming
       const response = await fetch(API_ENDPOINT, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           messages: [...messages, userMessage],
           knowledgeBase: JSON.stringify(knowledgeBase),
         }),
       });
 
-      if (!response.ok) {
-        throw new Error('Failed to get response');
-      }
+      if (!response.ok) throw new Error('Failed to get response');
 
       // Handle streaming response
       const reader = response.body?.getReader();
@@ -106,10 +98,7 @@ const renderMessageContent = (content: string) => {
 
       // Add empty assistant message that we'll update as content streams in
       const messageIndex = messages.length + 1; // +1 because we already added user message
-      setMessages((prev) => [
-        ...prev,
-        { role: 'assistant', content: '' },
-      ]);
+      setMessages((prev) => [...prev, { role: 'assistant', content: '' }]);
 
       if (reader) {
         while (true) {
@@ -120,45 +109,39 @@ const renderMessageContent = (content: string) => {
           const lines = chunk.split('\n');
 
           for (const line of lines) {
-            if (line.startsWith('data: ')) {
-              const data = line.slice(6);
-              
-              if (data === '[DONE]') {
-                break;
+            if (!line.startsWith('data: ')) continue;
+
+            const data = line.slice(6);
+            if (data === '[DONE]') break;
+
+            try {
+              const parsed = JSON.parse(data);
+
+              if (parsed.content) {
+                accumulatedContent += parsed.content;
+                setMessages((prev) => {
+                  const updated = [...prev];
+                  updated[messageIndex] = {
+                    role: 'assistant',
+                    content: removeAsterisks(accumulatedContent),
+                  };
+                  return updated;
+                });
               }
 
-              try {
-                const parsed = JSON.parse(data);
-                
-                if (parsed.content) {
-                  accumulatedContent += parsed.content;
-                  // Update the assistant message in real-time
-                  setMessages((prev) => {
-                    const updated = [...prev];
-                    updated[messageIndex] = {
-                      role: 'assistant',
-                      content: removeAsterisks(accumulatedContent),
-                    };
-                    return updated;
-                  });
-                }
-
-                if (parsed.error) {
-                  throw new Error(parsed.error);
-                }
-              } catch (e) {
-                // Ignore parsing errors for incomplete chunks
-              }
+              if (parsed.error) throw new Error(parsed.error);
+            } catch {
+              // Ignore parsing errors for incomplete chunks
             }
           }
         }
       }
-
     } catch (error) {
       console.error('Chat error:', error);
+
       // Fallback mock response for preview environment
       const mockResponse = getMockResponse(userMessage.content);
-      
+
       const assistantMessage: Message = {
         role: 'assistant',
         content: mockResponse,
@@ -189,33 +172,23 @@ const renderMessageContent = (content: string) => {
     setIsLoading(true);
 
     try {
-      // Call the SECURE server-side API with streaming
       const response = await fetch(API_ENDPOINT, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           messages: [...messages, userMessage],
           knowledgeBase: JSON.stringify(knowledgeBase),
         }),
       });
 
-      if (!response.ok) {
-        throw new Error('Failed to get response');
-      }
+      if (!response.ok) throw new Error('Failed to get response');
 
-      // Handle streaming response
       const reader = response.body?.getReader();
       const decoder = new TextDecoder();
       let accumulatedContent = '';
 
-      // Add empty assistant message that we'll update as content streams in
       const messageIndex = messages.length + 1;
-      setMessages((prev) => [
-        ...prev,
-        { role: 'assistant', content: '' },
-      ]);
+      setMessages((prev) => [...prev, { role: 'assistant', content: '' }]);
 
       if (reader) {
         while (true) {
@@ -226,45 +199,38 @@ const renderMessageContent = (content: string) => {
           const lines = chunk.split('\n');
 
           for (const line of lines) {
-            if (line.startsWith('data: ')) {
-              const data = line.slice(6);
-              
-              if (data === '[DONE]') {
-                break;
+            if (!line.startsWith('data: ')) continue;
+
+            const data = line.slice(6);
+            if (data === '[DONE]') break;
+
+            try {
+              const parsed = JSON.parse(data);
+
+              if (parsed.content) {
+                accumulatedContent += parsed.content;
+                setMessages((prev) => {
+                  const updated = [...prev];
+                  updated[messageIndex] = {
+                    role: 'assistant',
+                    content: removeAsterisks(accumulatedContent),
+                  };
+                  return updated;
+                });
               }
 
-              try {
-                const parsed = JSON.parse(data);
-                
-                if (parsed.content) {
-                  accumulatedContent += parsed.content;
-                  // Update the assistant message in real-time
-                  setMessages((prev) => {
-                    const updated = [...prev];
-                    updated[messageIndex] = {
-                      role: 'assistant',
-                      content: removeAsterisks(accumulatedContent),
-                    };
-                    return updated;
-                  });
-                }
-
-                if (parsed.error) {
-                  throw new Error(parsed.error);
-                }
-              } catch (e) {
-                // Ignore parsing errors for incomplete chunks
-              }
+              if (parsed.error) throw new Error(parsed.error);
+            } catch {
+              // Ignore parsing errors for incomplete chunks
             }
           }
         }
       }
-
     } catch (error) {
       console.error('Chat error:', error);
-      // Fallback mock response for preview environment
+
       const mockResponse = getMockResponse(userMessage.content);
-      
+
       const assistantMessage: Message = {
         role: 'assistant',
         content: mockResponse,
@@ -288,7 +254,7 @@ const renderMessageContent = (content: string) => {
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => setIsOpen(true)}
-            className="fixed bottom-6 right-6 bg-cflar-brown text-white rounded-full p-4 shadow-lg hover:bg-cflar-brown-hover transition-colors z-50"
+            className="fixed bottom-6 right-6 !bg-cflar-brown text-white rounded-full p-4 shadow-lg hover:!bg-cflar-brown-hover transition-colors z-50"
           >
             <MessageCircle size={28} />
           </motion.button>
@@ -300,11 +266,11 @@ const renderMessageContent = (content: string) => {
         {isOpen && (
           <motion.div
             initial={{ opacity: 0, y: 20, scale: 0.95 }}
-            animate={{ 
-              opacity: 1, 
-              y: 0, 
+            animate={{
+              opacity: 1,
+              y: 0,
               scale: 1,
-              height: isMinimized ? '60px' : '650px'
+              height: isMinimized ? '60px' : '650px',
             }}
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
             transition={{ duration: 0.2 }}
@@ -315,20 +281,20 @@ const renderMessageContent = (content: string) => {
               <div className="flex items-center gap-2">
                 <Sparkles size={20} />
                 <div className="font-semibold text-base text-white leading-none tracking-wide">
-                CFAR Assistant
+                  CFAR Assistant
                 </div>
-
               </div>
+
               <div className="flex gap-2">
                 <button
                   onClick={() => setIsMinimized(!isMinimized)}
-                  className="hover:bg-cflar-brown-hover p-1 rounded transition-colors"
+                  className="!bg-transparent hover:!bg-cflar-brown-hover p-1 rounded transition-colors"
                 >
                   {isMinimized ? <Maximize2 size={20} /> : <Minimize2 size={20} />}
                 </button>
                 <button
                   onClick={() => setIsOpen(false)}
-                  className="hover:bg-cflar-brown-hover p-1 rounded transition-colors"
+                  className="!bg-transparent hover:!bg-cflar-brown-hover p-1 rounded transition-colors"
                 >
                   <X size={20} />
                 </button>
@@ -339,23 +305,22 @@ const renderMessageContent = (content: string) => {
               <>
                 {/* Action Buttons */}
                 <div className="px-4 pt-4 pb-3">
-                  {/* Quick Action Buttons */}
                   <div className="flex gap-2 justify-center">
                     <button
                       onClick={() => sendQuickAction('What are your hours?')}
-                      className="border-2 border-cflar-brown text-cflar-brown bg-cflar-cream hover:bg-cflar-brown hover:text-white py-2 px-4 rounded-full text-sm font-semibold transition-colors uppercase"
+                      className="!border-2 !border-cflar-brown !text-cflar-brown !bg-cflar-cream hover:!bg-cflar-brown hover:!text-white py-2 px-6 !rounded-full text-sm font-semibold transition-colors uppercase"
                     >
                       HOURS
                     </button>
                     <button
                       onClick={() => sendQuickAction('How can I volunteer?')}
-                      className="border-2 border-cflar-brown text-cflar-brown bg-cflar-cream hover:bg-cflar-brown hover:text-white py-2 px-4 rounded-full text-sm font-semibold transition-colors uppercase"
+                      className="!border-2 !border-cflar-brown !text-cflar-brown !bg-cflar-cream hover:!bg-cflar-brown hover:!text-white py-2 px-6 !rounded-full text-sm font-semibold transition-colors uppercase"
                     >
                       VOLUNTEER
                     </button>
                     <button
                       onClick={() => sendQuickAction('Tell me about upcoming events')}
-                      className="border-2 border-cflar-brown text-cflar-brown bg-cflar-cream hover:bg-cflar-brown hover:text-white py-2 px-4 rounded-full text-sm font-semibold transition-colors uppercase"
+                      className="!border-2 !border-cflar-brown !text-cflar-brown !bg-cflar-cream hover:!bg-cflar-brown hover:!text-white py-2 px-6 !rounded-full text-sm font-semibold transition-colors uppercase"
                     >
                       EVENTS
                     </button>
@@ -376,6 +341,7 @@ const renderMessageContent = (content: string) => {
                           🐾
                         </div>
                       )}
+
                       <div
                         className={`max-w-[75%] rounded-2xl px-4 py-3 ${
                           message.role === 'user'
@@ -383,17 +349,21 @@ const renderMessageContent = (content: string) => {
                             : 'bg-cflar-bubble text-black shadow-sm'
                         }`}
                       >
-                        <div 
-                          className="text-base whitespace-pre-wrap leading-relaxed" 
+                        <div
+                          className="text-base whitespace-pre-wrap leading-relaxed"
                           style={{ margin: 0, padding: 0 }}
                           dangerouslySetInnerHTML={renderMessageContent(message.content)}
                         />
                         {message.role === 'assistant' && message.content && (
                           <p className="text-xs text-gray-500 mt-2" style={{ margin: '8px 0 0 0', padding: 0 }}>
-                            {new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })}
+                            {new Date().toLocaleTimeString('en-US', {
+                              hour: 'numeric',
+                              minute: '2-digit',
+                            })}
                           </p>
                         )}
                       </div>
+
                       {message.role === 'user' && (
                         <div className="flex-shrink-0 w-8 h-8 rounded-full bg-cflar-brown flex items-center justify-center text-white mt-1">
                           <User size={18} />
@@ -401,6 +371,7 @@ const renderMessageContent = (content: string) => {
                       )}
                     </div>
                   ))}
+
                   {isLoading && (
                     <div className="flex items-start gap-2">
                       <div className="flex-shrink-0 w-8 h-8 rounded-full bg-cflar-cream flex items-center justify-center text-lg">
@@ -408,13 +379,23 @@ const renderMessageContent = (content: string) => {
                       </div>
                       <div className="bg-cflar-bubble shadow-sm rounded-2xl px-4 py-3">
                         <div className="flex gap-1">
-                          <div className="w-2 h-2 bg-cflar-brown-hover rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-                          <div className="w-2 h-2 bg-cflar-brown-hover rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-                          <div className="w-2 h-2 bg-cflar-brown-hover rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+                          <div
+                            className="w-2 h-2 bg-cflar-brown-hover rounded-full animate-bounce"
+                            style={{ animationDelay: '0ms' }}
+                          />
+                          <div
+                            className="w-2 h-2 bg-cflar-brown-hover rounded-full animate-bounce"
+                            style={{ animationDelay: '150ms' }}
+                          />
+                          <div
+                            className="w-2 h-2 bg-cflar-brown-hover rounded-full animate-bounce"
+                            style={{ animationDelay: '300ms' }}
+                          />
                         </div>
                       </div>
                     </div>
                   )}
+
                   <div ref={messagesEndRef} />
                 </div>
 
@@ -433,7 +414,7 @@ const renderMessageContent = (content: string) => {
                     <button
                       onClick={handleSendMessage}
                       disabled={isLoading || !inputValue.trim()}
-                      className="bg-cflar-send text-white px-4 py-2.5 rounded-[10px] hover:bg-cflar-send-hover transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex-shrink-0"
+                      className="!bg-cflar-send text-white px-4 py-2.5 rounded-[10px] hover:!bg-cflar-send-hover transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex-shrink-0"
                     >
                       <Send size={18} />
                     </button>
@@ -451,10 +432,16 @@ const renderMessageContent = (content: string) => {
 // Mock response function for preview environment
 function getMockResponse(question: string): string {
   const mockResponses: { [key: string]: string } = {
-    'What are your hours?': 'Visit the [Tours page](https://cflar.dream.press/visit/tours) to see our hours and book a tour!',
-    'How can I volunteer?': 'Check out our [Volunteer page](https://cflar.dream.press/get-involved/volunteer) to learn about opportunities.',
-    'Tell me about upcoming events': 'See all upcoming events on our [Events page](https://cflar.dream.press/events). We have exciting activities planned!',
+    'What are your hours?':
+      'Visit the [Tours page](https://cflar.dream.press/visit/tours) to see our hours and book a tour!',
+    'How can I volunteer?':
+      'Check out our [Volunteer page](https://cflar.dream.press/get-involved/volunteer) to learn about opportunities.',
+    'Tell me about upcoming events':
+      'See all upcoming events on our [Events page](https://cflar.dream.press/events). We have exciting activities planned!',
   };
 
-  return mockResponses[question] || "I'm sorry, I don't have a specific answer for that. Please visit the [CFLAR website](https://cflar.dream.press) for more information.";
+  return (
+    mockResponses[question] ||
+    "I'm sorry, I don't have a specific answer for that. Please visit the [CFLAR website](https://cflar.dream.press) for more information."
+  );
 }

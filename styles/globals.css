@@ -127,3 +127,36 @@ body {
   color: inherit;
   margin: 0;
 }
+
+/* Force CFAR button colors even if WP theme uses !important */
+#cflar-chatbot-root .bg-cflar-brown {
+  background-color: var(--color-cflar-brown) !important;
+}
+#cflar-chatbot-root .hover\:bg-cflar-brown-hover:hover {
+  background-color: var(--color-cflar-brown-hover) !important;
+}
+
+#cflar-chatbot-root .bg-cflar-cream {
+  background-color: var(--color-cflar-cream) !important;
+}
+#cflar-chatbot-root .bg-cflar-bubble {
+  background-color: var(--color-cflar-bubble) !important;
+}
+
+#cflar-chatbot-root .bg-cflar-send {
+  background-color: var(--color-cflar-send) !important;
+}
+#cflar-chatbot-root .hover\:bg-cflar-send-hover:hover {
+  background-color: var(--color-cflar-send-hover) !important;
+}
+
+/* Force borders and rounding on pill buttons */
+#cflar-chatbot-root .border-cflar-brown {
+  border-color: var(--color-cflar-brown) !important;
+}
+#cflar-chatbot-root .text-cflar-brown {
+  color: var(--color-cflar-brown) !important;
+}
+#cflar-chatbot-root .rounded-full {
+  border-radius: 9999px !important;
+}
