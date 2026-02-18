@@ -222,3 +222,13 @@ body {
   background-color: var(--color-cflar-brown) !important;
   color: #fff !important;
 }
+
+/* Make sure Lucide icons are visible inside the widget (WP themes sometimes hide SVGs) */
+#cflar-chatbot-root svg.lucide {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+
+  stroke: #ffffff !important;
+  fill: none !important;
+}
