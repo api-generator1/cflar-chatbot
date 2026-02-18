@@ -418,7 +418,7 @@ export function ChatWidget() {
                       onChange={(e) => setInputValue(e.target.value)}
                       onKeyPress={handleKeyPress}
                       placeholder="What are your hours?"
-                      className="flex-1 h-[42px] bg-white border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-cflar-brown text-black placeholder-gray-400 px-4 rounded-[10px]"
+                      className="bg-cflar-send h-[42px] w-[42px] flex items-center justify-center rounded-[10px] border-2 border-red-500"
 
                       disabled={isLoading}
                     />
@@ -429,10 +429,6 @@ export function ChatWidget() {
 >
   <Send size={16} className="stroke-white" />
 </button>
-
-                    className="!bg-cflar-send hover:!bg-cflar-send-hover h-[42px] w-[42px] rounded-[10px] flex items-center justify-center shrink-0 border-2 border-red-500"
-
-
 
                   </div>
                 </div>
