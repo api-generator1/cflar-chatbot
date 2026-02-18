@@ -274,7 +274,10 @@ export function ChatWidget() {
             }}
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
             transition={{ duration: 0.2 }}
-            className="fixed bottom-6 right-6 w-[400px] bg-cflar-cream rounded-2xl shadow-2xl flex flex-col overflow-hidden z-50"
+            className={`fixed bottom-6 right-6 w-[400px] rounded-2xl shadow-2xl flex flex-col overflow-hidden z-50 ${
+  isMinimized ? 'bg-cflar-brown' : 'bg-cflar-cream'
+}`}
+
           >
             {/* Header */}
             <div className="cflar-header bg-cflar-brown text-white flex items-center justify-between">
