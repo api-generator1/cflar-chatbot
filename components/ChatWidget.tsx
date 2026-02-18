@@ -430,6 +430,9 @@ export function ChatWidget() {
   <Send size={16} className="stroke-white" />
 </button>
 
+                    className="!bg-cflar-send hover:!bg-cflar-send-hover h-[42px] w-[42px] rounded-[10px] flex items-center justify-center shrink-0 border-2 border-red-500"
+
+
 
                   </div>
                 </div>
