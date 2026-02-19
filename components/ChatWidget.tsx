@@ -425,7 +425,7 @@ export function ChatWidget() {
                     <button
                     onClick={handleSendMessage}
                     disabled={isLoading || !inputValue.trim()}
-                    className="border-4 border-red-500"
+                    className="border-8 border-red-500 bg-black text-white"
                     aria-label="Send message"
                     >
                     <Send size={16} className="stroke-white" />
