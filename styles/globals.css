@@ -2,6 +2,10 @@
 
 @import "tailwindcss";
 
+/* ✅ REQUIRED: Tell Tailwind where to scan for className usage */
+@source "../src/**/*.{js,ts,jsx,tsx}";
+@source "../components/**/*.{js,ts,jsx,tsx}";
+
 @theme {
   --color-cflar-brown: #7d401b;
   --color-cflar-brown-hover: #8F6A54;
