@@ -205,7 +205,7 @@ export function ChatWidget() {
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => setIsOpen(true)}
-            className="cflar-open fixed bottom-6 right-6 !bg-cflar-send text-white rounded-full h-[64px] w-[64px] flex items-center justify-center shadow-lg hover:!bg-send-hover transition-colors z-50"
+            className="cflar-open fixed bottom-6 right-6 !bg-cflar-send text-white rounded-full h-[64px] w-[64px] flex items-center justify-center shadow-lg hover:!bg-cflar-brown-hover transition-colors z-50"
           >
             <MessageCircle size={28} />
           </motion.button>
@@ -225,7 +225,7 @@ export function ChatWidget() {
             }}
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
             transition={{ duration: 0.2 }}
-            className={`fixed bottom-6 right-6 w-[400px] rounded-2xl shadow-2xl flex flex-col overflow-hidden z-50 ${
+            className={`fixed bottom-0 right-0 sm:bottom-6 sm:right-6 w-full sm:w-[400px] max-h-[100vh] sm:max-h-[650px] sm:rounded-2xl shadow-2xl flex flex-col overflow-hidden z-50 ${
               isMinimized ? "bg-cflar-brown" : "bg-cflar-cream"
             }`}
           >
