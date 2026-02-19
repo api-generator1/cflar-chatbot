@@ -221,7 +221,7 @@ export function ChatWidget() {
               opacity: 1,
               y: 0,
               scale: 1,
-              height: isMinimized ? "60px" : "650px",
+              height: isMinimized ? "60px" : undefined,
             }}
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
             transition={{ duration: 0.2 }}
