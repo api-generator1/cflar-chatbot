@@ -254,7 +254,7 @@ export function ChatWidget() {
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => setIsOpen(true)}
-            className="fixed bottom-6 right-6 !bg-cflar-brown text-white rounded-full h-[64px] w-[64px] flex items-center justify-center shadow-lg hover:!bg-cflar-brown-hover transition-colors z-50"
+            className="fixed bottom-6 right-6 !bg-cflar-send text-white rounded-full h-[64px] w-[64px] flex items-center justify-center shadow-lg hover:!bg-cflar-brown-hover transition-colors z-50"
           >
             <MessageCircle size={28} />
           </motion.button>
