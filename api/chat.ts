@@ -41,18 +41,23 @@ export default async function handler(
     // ⏱️ KB parsing start
     const kbParseStart = Date.now();
     
-    // Debug logging
-    console.log('=== CHAT API DEBUG ===');
-    console.log('🤖 Model: gpt-4o-mini (with streaming + caching)');
-    console.log('Knowledge Base received:', knowledgeBase ? 'YES' : 'NO');
+    // 🚀 OPTIMIZATION: Parse KB once and reuse
+    let parsedKB = null;
     if (knowledgeBase) {
       try {
-        const kb = JSON.parse(knowledgeBase);
-        console.log('KB Pages:', kb.pageCount || 0);
-        console.log('KB Last Updated:', kb.lastUpdated);
+        parsedKB = JSON.parse(knowledgeBase);
       } catch (e) {
         console.log('KB Parse Error:', e);
       }
+    }
+    
+    // Debug logging
+    console.log('=== CHAT API DEBUG ===');
+    console.log('🤖 Model: gpt-4o-mini (with streaming + caching)');
+    console.log('Knowledge Base received:', parsedKB ? 'YES' : 'NO');
+    if (parsedKB) {
+      console.log('KB Pages:', parsedKB.pageCount || 0);
+      console.log('KB Last Updated:', parsedKB.lastUpdated);
     }
     console.log('===================');
 
@@ -61,25 +66,18 @@ export default async function handler(
     // Parse and format the knowledge base for the AI
     let formattedKnowledgeBase = 'No knowledge base provided. Please direct users to visit https://cflar.dream.press for information.';
     
-    if (knowledgeBase) {
-      try {
-        const kb = JSON.parse(knowledgeBase);
-        if (kb.pages && kb.pages.length > 0) {
-          formattedKnowledgeBase = kb.pages.map((page: any) => {
-            return `
+    if (parsedKB && parsedKB.pages && parsedKB.pages.length > 0) {
+      formattedKnowledgeBase = parsedKB.pages.map((page: any) => {
+        return `
 PAGE: ${page.title}
 URL: ${page.url}
 CONTENT: ${page.content}
 HEADINGS: ${page.headings.join(', ')}
 ---`;
-          }).join('\n\n');
-          
-          console.log('✅ Formatted KB - Total pages:', kb.pages.length);
-          console.log('📄 Sample page:', kb.pages[0]?.title);
-        }
-      } catch (e) {
-        console.error('Failed to parse knowledge base:', e);
-      }
+      }).join('\n\n');
+      
+      console.log('✅ Formatted KB - Total pages:', parsedKB.pages.length);
+      console.log('📄 Sample page:', parsedKB.pages[0]?.title);
     }
     
     // ⏱️ KB parsing complete
@@ -96,6 +94,8 @@ IMPORTANT: When users ask about "upcoming events" or "future events", ONLY menti
 
 STRICT FORMATTING RULE:
 Never use asterisks (*) for bold text or lists. Do not use *, **, or *** anywhere in the response.
+
+Use numbered lists (1. 2. 3.) or plain paragraph formatting instead.
 
 CRITICAL FORMATTING RULE
 ALWAYS USE MARKDOWN LINKS for any URL mention: [Page Name](URL)

@@ -26,44 +26,12 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-#cflar-chatbot-root .cflar-chat-link {
-  color: var(--color-cflar-send);
-  text-decoration: underline;
-  font-weight: 500;
-}
-#cflar-chatbot-root .cflar-chat-link:hover {
-  color: var(--color-cflar-send-hover);
-}
-
-#cflar-chatbot-root,
-#cflar-chatbot-root * {
-  box-sizing: border-box;
-}
-
 /* ---------------------------
-   Prevent WP theme bleed-through
-   Scope everything to the widget root
+   CHATBOT WIDGET - BASE STYLES
+   Scoped to prevent WP theme bleed-through
 ---------------------------- */
 
-/* Lock base text styling */
-#cflar-chatbot-root {
-  font-family: 'Lato', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
-    Ubuntu, Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
-  color: #111827; /* near-black */
-  font-size: 16px;
-  line-height: 1.4;
-}
-
-/* Ensure everything inherits the widget font */
-#cflar-chatbot-root * {
-  font-family: inherit;
-  box-sizing: border-box;
-}
-/* ---------------------------
-   WP theme bleed guard (safe)
-   Uses :where() so Tailwind utilities can still style buttons
----------------------------- */
-
+/* Lock base text styling - use :where() for low specificity so Tailwind can override */
 :where(#cflar-chatbot-root) {
   font-family: 'Lato', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
     Ubuntu, Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
@@ -84,6 +52,10 @@ body {
   font: inherit;
   letter-spacing: normal;
   text-transform: none;
+  box-shadow: none;
+  background-image: none;
+  appearance: none;
+  -webkit-appearance: none;
 }
 
 /* Prevent WP "blue button" backgrounds without breaking Tailwind */
@@ -92,7 +64,6 @@ body {
   box-shadow: none;
 }
 
-/* If WP is forcing a blue background with !important, this wins inside the widget */
 :where(#cflar-chatbot-root) button:not([class*="bg-"]) {
   background-color: transparent;
 }
@@ -105,36 +76,17 @@ body {
 :where(#cflar-chatbot-root) h5,
 :where(#cflar-chatbot-root) h6 {
   margin: 0;
-}
-
-
-/* Inputs should not inherit WP styles */
-#cflar-chatbot-root input,
-#cflar-chatbot-root textarea {
-  font: inherit;
-  color: inherit;
-  letter-spacing: normal;
-  text-transform: none;
-  box-shadow: none;
-  background-image: none;
-  appearance: none;
-  -webkit-appearance: none;
-}
-
-/* Ensure header title always looks right */
-#cflar-chatbot-root h1,
-#cflar-chatbot-root h2,
-#cflar-chatbot-root h3,
-#cflar-chatbot-root h4,
-#cflar-chatbot-root h5,
-#cflar-chatbot-root h6 {
   font-family: inherit;
   font-weight: inherit;
   color: inherit;
-  margin: 0;
 }
 
-/* Force CFAR button colors even if WP theme uses !important */
+/* ---------------------------
+   CHATBOT WIDGET - CFLAR BRANDING
+   Uses !important to override aggressive WP themes
+---------------------------- */
+
+/* Force CFAR colors even if WP theme uses !important */
 #cflar-chatbot-root .bg-cflar-brown {
   background-color: var(--color-cflar-brown) !important;
 }
@@ -156,7 +108,7 @@ body {
   background-color: var(--color-cflar-send-hover) !important;
 }
 
-/* Force borders and rounding on pill buttons */
+/* Force borders and text colors */
 #cflar-chatbot-root .border-cflar-brown {
   border-color: var(--color-cflar-brown) !important;
 }
@@ -174,28 +126,32 @@ body {
     Ubuntu, Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif !important;
 }
 
-/* Header sizing (reduce height) */
-#cflar-chatbot-root .cflar-header {
-  padding: 12px 16px !important; /* smaller than px-6 py-4 */
+/* Markdown links styling */
+#cflar-chatbot-root .cflar-chat-link {
+  color: var(--color-cflar-send);
+  text-decoration: underline;
+  font-weight: 500;
+}
+#cflar-chatbot-root .cflar-chat-link:hover {
+  color: var(--color-cflar-send-hover);
 }
 
-/* Title slightly larger, consistent */
+/* ---------------------------
+   CHATBOT WIDGET - COMPONENT STYLES
+---------------------------- */
+
+/* Header sizing (compact) */
+#cflar-chatbot-root .cflar-header {
+  padding: 12px 16px !important;
+}
+
+/* Title styling */
 #cflar-chatbot-root .cflar-title {
-  font-family: 'Lato', -apple-system, "system-ui", "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif !important;
   font-size: 18px !important;
   font-weight: 600 !important;
   line-height: 1.1 !important;
   letter-spacing: 0.02em !important;
 }
-
-#cflar-chatbot-root button.bg-cflar-send .lucide,
-#cflar-chatbot-root button.\!bg-cflar-send .lucide {
-  stroke: #fff !important;
-  color: #fff !important;
-  opacity: 1 !important;
-  visibility: visible !important;
-}
-
 
 /* Header icon buttons: keep compact, no WP blue background */
 #cflar-chatbot-root .cflar-iconbtn {
@@ -205,23 +161,31 @@ body {
   box-shadow: none !important;
 }
 
-/* Subheader sizing (reduce beige area height) */
+/* Send button icon color fix */
+#cflar-chatbot-root button.bg-cflar-send .lucide,
+#cflar-chatbot-root button.\!bg-cflar-send .lucide {
+  stroke: #fff !important;
+  color: #fff !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+/* Subheader (quick action area) */
 #cflar-chatbot-root .cflar-subheader {
   padding: 10px 12px 8px !important;
 }
 
-/* Quick action pills: force padding + font size so WP can't change it */
+/* Quick action pill buttons */
 #cflar-chatbot-root .cflar-quick {
-  padding: 8px 16px !important;       /* smaller pill height */
+  padding: 8px 16px !important;
   font-weight: 600 !important;
-  font-size: 14px !important;         /* tighter like intended */
+  font-size: 14px !important;
   background-color: var(--color-cflar-cream) !important;
   border-color: var(--color-cflar-brown) !important;
   color: var(--color-cflar-brown) !important;
   border-radius: 9999px !important;
 }
 
-/* Hover states */
 #cflar-chatbot-root .cflar-quick:hover {
   background-color: var(--color-cflar-brown) !important;
   color: #fff !important;
