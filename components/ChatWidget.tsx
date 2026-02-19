@@ -221,11 +221,11 @@ export function ChatWidget() {
               opacity: 1,
               y: 0,
               scale: 1,
-              height: isMinimized ? "60px" : "650px",
+              height: isMinimized ? "60px" : "auto",
             }}
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
             transition={{ duration: 0.2 }}
-            className={`fixed bottom-0 right-0 sm:bottom-6 sm:right-6 w-full sm:w-[400px] max-h-[100vh] sm:max-h-[650px] sm:rounded-2xl shadow-2xl flex flex-col overflow-hidden z-50 ${
+            className={`fixed top-[116px] bottom-3 left-3 right-3 sm:top-auto sm:bottom-6 sm:right-6 sm:left-auto sm:w-[400px] h-auto sm:h-[650px] rounded-2xl shadow-2xl flex flex-col overflow-hidden z-50 ${
               isMinimized ? "bg-cflar-brown" : "bg-cflar-cream"
             }`}
           >
