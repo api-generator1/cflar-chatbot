@@ -422,12 +422,13 @@ export function ChatWidget() {
 
                       disabled={isLoading}
                     />
-                    <button
-                    onClick={handleSendMessage}
-                    disabled={isLoading || !inputValue.trim()}
-                    className="border-8 border-red-500 bg-black text-white"
-                    aria-label="Send message"
-                    >
+                   <button
+  onClick={handleSendMessage}
+  disabled={isLoading || !inputValue.trim()}
+  className="cflar-send-button"
+  aria-label="Send message"
+>
+
                     <Send size={16} className="stroke-white" />
                     </button>
 
