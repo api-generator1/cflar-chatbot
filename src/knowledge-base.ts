@@ -367,22 +367,23 @@ export const knowledgeBase = {
       "scrapedAt": "2026-02-16T18:58:15.462Z"
     },
     {
-      "url": "https://cflar.dream.press/visit/events/sip-and-stroll-spring-2026/",
-      "title": "Sip & Stroll - Spring 2026 - Central Florida Animal Reserve",
-      "content": "Sip & Stroll – Spring 2026 Presented by Central Florida Animal Reserve Date & Time Location Pricing Date & Time March 8, 2026 2pm - 5pm Location Central Florida Animal Reserve Pricing $55 Members $65 Non-Members Come enjoy an afternoon of fine wines paired with unique cheeses and a stroll with some of the most amazing creatures in the world! Reserve your ticket Ticket Information $55 Members, $65 Non-Members All proceeds go to help the animal residents of CFAR! Silent Auction Guests will be able to participate in a silent auction with all proceeds benefiting our resident cats! Guests must be present at the event to bid on items. All items will be distributed to winners before the event concludes. Dress Attire Classy-casual, spring attire is welcomed, however minimalist footwear is not recommended. Please wear comfortable footwear as some areas have gravel and uneven surfaces. Reserve your ticket Location Information Central Florida Animal Reserve 500 Broussard Road, St. Cloud, FL 34773 Parking Information Staff will be on hand to direct you to the appropriate areas to park. If you require any assistance to attend the event, please contact directly to ensure accommodation. Reserve your ticket Event Flyer Frequently Asked Questions How do I become a member to receive the member discount? Learn more on our membership page. Are there ID requirements or an age limit to enter the event? The recommended minimum age requirement is 21 years old. ID’s will be required at check-in. All guests are asked to please consume any alcohol responsibly. How long is the event? The self-guided stroll will be open from 2pm-3:30pm and the wine tasting class will be held after for approximately an hour. Event Sponsorship Opportunities Would you or your business like to sponsor this event? Event sponsorships help support CFAR’s mission while offering visibility and community engagement opportunities. Sponsor Don't miss out! Purchase your tickets today to reserve your spot. Reserve your ticket Share this event",
+      "url": "https://cflar.dream.press/visit/events/big-cat-derby-day-2026/",
+      "title": "Big Cat Derby Day 2026 - Central Florida Animal Reserve",
+      "content": "Skip to content Big Cat Derby Day 2026 Presented by Central Florida Animal Reserve Date & Time May 2, 2026 4:00 - 7:30 PM Location Central Florida Animal Reserve 500 Broussard Road, St. Cloud, FL 34773 Pricing $55 Members $65 Non-Members Join us to watch the 152nd Kentucky Derby as we celebrate with Bourbon, Big Cats, and a Cat-Themed Hat Contest Reserve your ticket Ticket Information $55 Members, $65 Non-Members Dress Attire Bring your best and brightest cat-themed hat. Classy-casual, spring attire is welcomed, however minimalist footwear is not recommended. Please wear comfortable footwear as some areas have gravel and uneven surfaces. Reserve your ticket Location Information Central Florida Animal Reserve 500 Broussard Road, St. Cloud, FL 34773 Parking Information Staff will be on hand to direct you to the appropriate areas to park. If you require any assistance to attend the event, please contact directly to ensure accommodation. Reserve your ticket Event Flyer Frequently Asked Questions Event Sponsorship Opportunities Would you or your business like to sponsor this event? Event sponsorships help support CFAR's mission while offering visibility and community engagement opportunities.",
       "headings": [
-        "Sip & Stroll – Spring 2026",
+        "Big Cat Derby Day 2026",
         "Date & Time",
         "Location",
         "Pricing",
-        "Date & Time",
-        "March 8, 2026",
-        "2pm - 5pm",
-        "Location",
-        "Central Florida Animal Reserve",
-        "Pricing"
+        "Ticket Information",
+        "Dress Attire",
+        "Location Information",
+        "Parking Information",
+        "Event Flyer",
+        "Frequently Asked Questions",
+        "Event Sponsorship Opportunities"
       ],
-      "scrapedAt": "2026-02-16T18:58:16.144Z"
+      "scrapedAt": "2026-03-12T00:00:00.000Z"
     },
     {
       "url": "https://cflar.dream.press/get-involved/volunteer/teen-volunteers",
