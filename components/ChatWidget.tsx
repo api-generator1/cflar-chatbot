@@ -17,6 +17,9 @@ interface Message {
   content: string;
 }
 
+const ASSISTANT_AVATAR_URL =
+  "https://cflar.dream.press/wp-content/uploads/2026/03/Untitled-design-2026-03-12T110955.538.png";
+
 export function ChatWidget() {
   const [isOpen, setIsOpen] = useState(false);
   const [isMinimized, setIsMinimized] = useState(false);
@@ -61,7 +64,7 @@ export function ChatWidget() {
         {
           role: "assistant",
           content:
-            "Hi! 🐾 Welcome to CFAR - the Central Florida Animal Reserve. I'm an AI helper, here to answer questions about our big cat reserve, visiting, tours, residents, and more. How can I help you today?",
+            "Hi! 🐾 I’m Sebastian, your virtual guide for Central Florida Animal Reserve. I’m here to help answer questions about visiting, guided tours, our residents, and ways to support the reserve.\n\nI’m an AI assistant created to help visitors quickly find information. While I do my best to be accurate, I may occasionally make mistakes.\n\nHow can I help you today?",
         },
       ]);
     }
@@ -234,7 +237,7 @@ export function ChatWidget() {
               <div className="flex items-center gap-2">
                 <Sparkles size={20} />
                 <div className="cflar-title font-semibold text-lg text-white leading-none tracking-wide">
-                  CFAR Assistant
+                  Ask Sebastian
                 </div>
               </div>
 
@@ -304,9 +307,11 @@ export function ChatWidget() {
                       }`}
                     >
                       {message.role === "assistant" && (
-                        <div className="flex-shrink-0 w-8 h-8 rounded-full bg-cflar-cream flex items-center justify-center text-lg mt-1">
-                          🐾
-                        </div>
+                        <img
+                          src={ASSISTANT_AVATAR_URL}
+                          alt="Sebastian avatar"
+                          className="flex-shrink-0 w-8 h-8 rounded-full object-cover mt-1"
+                        />
                       )}
 
                       <div
@@ -353,9 +358,11 @@ export function ChatWidget() {
 
                   {isLoading && (
                     <div className="flex items-start gap-2">
-                      <div className="flex-shrink-0 w-8 h-8 rounded-full bg-cflar-cream flex items-center justify-center text-lg">
-                        🐾
-                      </div>
+                      <img
+                        src={ASSISTANT_AVATAR_URL}
+                        alt="Sebastian avatar"
+                        className="flex-shrink-0 w-8 h-8 rounded-full object-cover"
+                      />
                       <div className="bg-cflar-bubble shadow-sm rounded-2xl px-4 py-3">
                         <div className="flex gap-1">
                           <div
