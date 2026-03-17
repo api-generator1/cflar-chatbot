@@ -10,7 +10,7 @@ import { dirname, join } from 'path';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-const BASE_URL = 'https://cflar.dream.press';
+const BASE_URL = 'https://cflar.org';
 const MAX_PAGES = 100; // Increased to capture more pages
 
 // URLs to visit (will be populated by crawler)

@@ -18,7 +18,7 @@ interface Message {
 }
 
 const ASSISTANT_AVATAR_URL =
-  "https://cflar.dream.press/wp-content/uploads/2026/03/Untitled-design-2026-03-12T110955.538.png";
+  "https://cflar.org/wp-content/uploads/2026/03/Untitled-design-2026-03-12T110955.538.png";
 
 export function ChatWidget() {
   const [isOpen, setIsOpen] = useState(false);
@@ -425,15 +425,15 @@ export function ChatWidget() {
 function getMockResponse(question: string): string {
   const mockResponses: { [key: string]: string } = {
     "What are your hours?":
-      "Visit the [Tours page](https://cflar.dream.press/visit/tours) to see our hours and book a tour!",
+      "Visit the [Tours page](https://cflar.org/visit/tours) to see our hours and book a tour!",
     "How can I volunteer?":
-      "Check out our [Volunteer page](https://cflar.dream.press/get-involved/volunteer) to learn about opportunities.",
+      "Check out our [Volunteer page](https://cflar.org/get-involved/volunteer) to learn about opportunities.",
     "Tell me about upcoming events":
-      "See all upcoming events on our [Events page](https://cflar.dream.press/events). We have exciting activities planned!",
+      "See all upcoming events on our [Events page](https://cflar.org/events). We have exciting activities planned!",
   };
 
   return (
     mockResponses[question] ||
-    "I'm sorry, I don't have a specific answer for that. Please visit the [CFLAR website](https://cflar.dream.press) for more information."
+    "I'm sorry, I don't have a specific answer for that. Please visit the [CFLAR website](https://cflar.org) for more information."
   );
 }
