@@ -86,7 +86,7 @@ export function KnowledgeBaseDebug() {
               npm run scrape
             </code>
             <p className="text-blue-600 text-xs mt-2">
-              This will crawl https://cflar.dream.press and save the data to /src/knowledge-base.ts
+              This will crawl https://cflar.org and save the data to /src/knowledge-base.ts
             </p>
           </div>
         </div>
