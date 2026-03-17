@@ -64,7 +64,7 @@ export default async function handler(
     // Build the system prompt with knowledge base context
     
     // Parse and format the knowledge base for the AI
-    let formattedKnowledgeBase = 'No knowledge base provided. Please direct users to visit https://cflar.dream.press for information.';
+    let formattedKnowledgeBase = 'No knowledge base provided. Please direct users to visit https://cflar.org for information.';
     
     if (parsedKB && parsedKB.pages && parsedKB.pages.length > 0) {
       formattedKnowledgeBase = parsedKB.pages.map((page: any) => {
@@ -100,8 +100,8 @@ Use numbered lists (1. 2. 3.) or plain paragraph formatting instead.
 CRITICAL FORMATTING RULE
 ALWAYS USE MARKDOWN LINKS for any URL mention: [Page Name](URL)
 
-✅ CORRECT: "Visit the [Tours page](https://cflar.dream.press/visit/tours) to book"
-❌ WRONG: "Tours page: https://cflar.dream.press/visit/tours"
+✅ CORRECT: "Visit the [Tours page](https://cflar.org/visit/tours) to book"
+❌ WRONG: "Tours page: https://cflar.org/visit/tours"
 
 WRITE IN A NATURAL, CONVERSATIONAL TONE - Use complete sentences and paragraphs. Weave information together naturally.
 
@@ -139,11 +139,11 @@ KNOWLEDGE BASE:
 ${formattedKnowledgeBase}
 
 QUICK REFERENCE LINKS:
-- Donate: https://cflar.dream.press/get-involved/donate/
-- Book a Tour: https://cflar.dream.press/visit/tours/
-- Volunteer: https://cflar.dream.press/get-involved/volunteer/
-- About Us: https://cflar.dream.press/about
-- Contact: https://cflar.dream.press/contact-us/
+- Donate: https://cflar.org/get-involved/donate/
+- Book a Tour: https://cflar.org/visit/tours/
+- Volunteer: https://cflar.org/get-involved/volunteer/
+- About Us: https://cflar.org/about
+- Contact: https://cflar.org/contact-us/
 
 FINAL REMINDER: DO NOT USE ASTERISKS (*) - Use numbered lists or natural paragraph form instead!`;
 
@@ -246,7 +246,7 @@ FINAL REMINDER: DO NOT USE ASTERISKS (*) - Use numbered lists or natural paragra
     
     // Send error as SSE
     res.write(`data: ${JSON.stringify({ 
-      error: 'Sorry, I encountered an error. Please try again or visit https://cflar.dream.press for assistance.' 
+      error: 'Sorry, I encountered an error. Please try again or visit https://cflar.org for assistance.' 
     })}\n\n`);
     res.end();
   }

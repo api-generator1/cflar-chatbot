@@ -21,7 +21,7 @@ export function SystemPromptViewer() {
       // Set fallback empty knowledge base
       setKnowledgeBase({
         lastUpdated: new Date().toISOString(),
-        baseUrl: 'https://cflar.dream.press',
+        baseUrl: 'https://cflar.org',
         pageCount: 0,
         pages: []
       });
@@ -81,11 +81,11 @@ KNOWLEDGE BASE:
 ${formattedKB}
 
 QUICK REFERENCE LINKS:
-- Donate: https://cflar.dream.press/get-involved/donate/
-- Book a Tour: https://cflar.dream.press/visit/tours/
-- Volunteer: https://cflar.dream.press/get-involved/volunteer/
-- About Us: https://cflar.dream.press/about
-- Contact: https://cflar.dream.press/contact-us/
+- Donate: https://cflar.org/get-involved/donate/
+- Book a Tour: https://cflar.org/visit/tours/
+- Volunteer: https://cflar.org/get-involved/volunteer/
+- About Us: https://cflar.org/about
+- Contact: https://cflar.org/contact-us/
 
 Answer the user's questions naturally and include relevant links when appropriate.`;
   };
