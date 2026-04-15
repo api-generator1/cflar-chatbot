@@ -4,8 +4,6 @@ import {
   MessageCircle,
   X,
   Send,
-  Minimize2,
-  Maximize2,
   Sparkles,
   User,
 } from "lucide-react";
@@ -22,7 +20,6 @@ const ASSISTANT_AVATAR_URL =
 
 export function ChatWidget() {
   const [isOpen, setIsOpen] = useState(false);
-  const [isMinimized, setIsMinimized] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputValue, setInputValue] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -71,7 +68,7 @@ export function ChatWidget() {
   }, [isOpen, messages]);
 
   useEffect(() => {
-    if (!isOpen || isMinimized) return;
+    if (!isOpen) return;
 
     const isDesktop = window.matchMedia(
       "(min-width: 640px)",
@@ -86,7 +83,7 @@ export function ChatWidget() {
     }, 0);
 
     return () => window.clearTimeout(timeoutId);
-  }, [isOpen, isMinimized]);
+  }, [isOpen]);
 
   // Show welcome message when chat opens for the first time
   useEffect(() => {
@@ -227,9 +224,8 @@ export function ChatWidget() {
     await streamChatResponse(userMessage);
   };
 
-  const windowPositionClasses = isMinimized
-    ? "top-auto bottom-5 left-3 right-3 sm:top-auto sm:bottom-6 sm:right-6 sm:left-auto sm:w-[400px] sm:h-[60px]"
-    : "top-[126px] bottom-5 left-3 right-3 sm:top-[150px] sm:bottom-6 sm:right-6 sm:left-auto sm:w-[400px] sm:h-auto";
+  const windowPositionClasses =
+    "top-[126px] bottom-8 left-3 right-3 sm:top-[150px] sm:bottom-6 sm:right-6 sm:left-auto sm:w-[400px] sm:h-auto";
 
   return (
     <div id="cflar-chatbot-root">
@@ -243,7 +239,7 @@ export function ChatWidget() {
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => setIsOpen(true)}
-            className="cflar-open fixed bottom-6 right-6 !bg-cflar-send text-white rounded-full h-[64px] w-[64px] flex items-center justify-center shadow-lg hover:!bg-cflar-brown-hover transition-colors z-50"
+            className="cflar-open fixed bottom-6 right-6 !bg-cflar-send text-white rounded-full h-[64px] w-[64px] flex items-center justify-center shadow-lg hover:!bg-cflar-brown-hover transition-colors z-[2147483000]"
           >
             <MessageCircle size={28} />
           </motion.button>
@@ -259,13 +255,10 @@ export function ChatWidget() {
               opacity: 1,
               y: 0,
               scale: 1,
-              height: isMinimized ? "60px" : undefined,
             }}
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
             transition={{ duration: 0.2 }}
-            className={`fixed ${windowPositionClasses} rounded-2xl shadow-2xl flex flex-col overflow-hidden z-50 ${
-              isMinimized ? "bg-cflar-brown" : "bg-cflar-cream"
-            }`}
+            className={`fixed ${windowPositionClasses} rounded-2xl shadow-2xl flex flex-col overflow-hidden z-[2147483000] bg-cflar-cream`}
           >
             {/* Header */}
             <div className="cflar-header bg-cflar-brown text-white flex items-center justify-between">
@@ -278,20 +271,7 @@ export function ChatWidget() {
 
               <div className="flex gap-2">
                 <button
-                  onClick={() => setIsMinimized(!isMinimized)}
-                  className="cflar-iconbtn !bg-transparent hover:!bg-cflar-brown-hover rounded transition-colors"
-                >
-                  {isMinimized ? (
-                    <Maximize2 size={20} />
-                  ) : (
-                    <Minimize2 size={20} />
-                  )}
-                </button>
-                <button
-                  onClick={() => {
-                    setIsOpen(false);
-                    setIsMinimized(false);
-                  }}
+                  onClick={() => setIsOpen(false)}
                   className="cflar-iconbtn !bg-transparent hover:!bg-cflar-brown-hover rounded transition-colors"
                 >
                   <X size={20} />
@@ -299,45 +279,43 @@ export function ChatWidget() {
               </div>
             </div>
 
-            {!isMinimized && (
-              <>
-                {/* Action Buttons */}
-                <div className="cflar-subheader">
-                  <div className="flex gap-2 justify-center">
-                    <button
-                      onClick={() =>
-                        sendQuickAction("What are your hours?")
-                      }
-                      className="cflar-quick !border-2 !border-cflar-brown !text-cflar-brown !bg-cflar-cream hover:!bg-cflar-brown hover:!text-white !rounded-full font-semibold transition-colors uppercase"
-                    >
-                      HOURS
-                    </button>
-                    <button
-                      onClick={() =>
-                        sendQuickAction("How can I volunteer?")
-                      }
-                      className="cflar-quick !border-2 !border-cflar-brown !text-cflar-brown !bg-cflar-cream hover:!bg-cflar-brown hover:!text-white !rounded-full font-semibold transition-colors uppercase"
-                    >
-                      VOLUNTEER
-                    </button>
-                    <button
-                      onClick={() =>
-                        sendQuickAction(
-                          "Tell me about upcoming events",
-                        )
-                      }
-                      className="cflar-quick !border-2 !border-cflar-brown !text-cflar-brown !bg-cflar-cream hover:!bg-cflar-brown hover:!text-white !rounded-full font-semibold transition-colors uppercase"
-                    >
-                      EVENTS
-                    </button>
-                  </div>
-                </div>
-
-                {/* Messages */}
-                <div
-                  ref={messagesContainerRef}
-                  className="flex-1 overflow-y-auto px-4 pt-4 pb-4 space-y-3 bg-white"
+            {/* Action Buttons */}
+            <div className="cflar-subheader">
+              <div className="flex gap-2 justify-center">
+                <button
+                  onClick={() =>
+                    sendQuickAction("What are your hours?")
+                  }
+                  className="cflar-quick !border-2 !border-cflar-brown !text-cflar-brown !bg-cflar-cream hover:!bg-cflar-brown hover:!text-white !rounded-full font-semibold transition-colors uppercase"
                 >
+                  HOURS
+                </button>
+                <button
+                  onClick={() =>
+                    sendQuickAction("How can I volunteer?")
+                  }
+                  className="cflar-quick !border-2 !border-cflar-brown !text-cflar-brown !bg-cflar-cream hover:!bg-cflar-brown hover:!text-white !rounded-full font-semibold transition-colors uppercase"
+                >
+                  VOLUNTEER
+                </button>
+                <button
+                  onClick={() =>
+                    sendQuickAction(
+                      "Tell me about upcoming events",
+                    )
+                  }
+                  className="cflar-quick !border-2 !border-cflar-brown !text-cflar-brown !bg-cflar-cream hover:!bg-cflar-brown hover:!text-white !rounded-full font-semibold transition-colors uppercase"
+                >
+                  EVENTS
+                </button>
+              </div>
+            </div>
+
+            {/* Messages */}
+            <div
+              ref={messagesContainerRef}
+              className="flex-1 overflow-y-auto px-4 pt-4 pb-4 space-y-3 bg-white"
+            >
                   {messages.map((message, index) => (
                     <div
                       key={index}
@@ -424,37 +402,35 @@ export function ChatWidget() {
                   )}
 
                   <div ref={messagesEndRef} />
-                </div>
+            </div>
 
-                {/* Input */}
-                <div className="px-4 py-4 bg-gray-100">
-                  <div className="flex gap-3 items-center">
-                    <input
-                      type="text"
-                      value={inputValue}
-                      onChange={(e) =>
-                        setInputValue(e.target.value)
-                      }
-                      onKeyPress={handleKeyPress}
-                      placeholder="What are your hours?"
-                      className="flex-1 h-[42px] bg-white border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-cflar-brown text-black placeholder-gray-400 px-4 rounded-[10px]"
-                      disabled={isLoading}
-                    />
-                    <button
-                      onClick={handleSendMessage}
-                      disabled={isLoading || !inputValue.trim()}
-                      className="cflar-send-button"
-                      aria-label="Send message"
-                    >
-                      <Send
-                        size={16}
-                        className="stroke-white"
-                      />
-                    </button>
-                  </div>
-                </div>
-              </>
-            )}
+            {/* Input */}
+            <div className="px-4 py-4 bg-gray-100">
+              <div className="flex gap-3 items-center">
+                <input
+                  type="text"
+                  value={inputValue}
+                  onChange={(e) =>
+                    setInputValue(e.target.value)
+                  }
+                  onKeyPress={handleKeyPress}
+                  placeholder="What are your hours?"
+                  className="flex-1 h-[42px] bg-white border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-cflar-brown text-black placeholder-gray-400 px-4 rounded-[10px]"
+                  disabled={isLoading}
+                />
+                <button
+                  onClick={handleSendMessage}
+                  disabled={isLoading || !inputValue.trim()}
+                  className="cflar-send-button"
+                  aria-label="Send message"
+                >
+                  <Send
+                    size={16}
+                    className="stroke-white"
+                  />
+                </button>
+              </div>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
