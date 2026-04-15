@@ -27,6 +27,8 @@ export function ChatWidget() {
   const [inputValue, setInputValue] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const messagesContainerRef =
+    useRef<HTMLDivElement>(null);
   
   // 🚀 OPTIMIZATION: Stringify KB once instead of on every message
   const stringifiedKB = useMemo(() => JSON.stringify(knowledgeBaseData), []);
@@ -54,8 +56,37 @@ export function ChatWidget() {
   };
 
   useEffect(() => {
+    const isDesktop = window.matchMedia(
+      "(min-width: 640px)",
+    ).matches;
+    const isInitialDesktopGreeting =
+      isDesktop &&
+      isOpen &&
+      messages.length === 1 &&
+      messages[0]?.role === "assistant";
+
+    if (isInitialDesktopGreeting) return;
+
     scrollToBottom();
-  }, [messages]);
+  }, [isOpen, messages]);
+
+  useEffect(() => {
+    if (!isOpen || isMinimized) return;
+
+    const isDesktop = window.matchMedia(
+      "(min-width: 640px)",
+    ).matches;
+
+    if (!isDesktop) return;
+
+    const timeoutId = window.setTimeout(() => {
+      if (messagesContainerRef.current) {
+        messagesContainerRef.current.scrollTop = 0;
+      }
+    }, 0);
+
+    return () => window.clearTimeout(timeoutId);
+  }, [isOpen, isMinimized]);
 
   // Show welcome message when chat opens for the first time
   useEffect(() => {
@@ -196,6 +227,10 @@ export function ChatWidget() {
     await streamChatResponse(userMessage);
   };
 
+  const desktopWindowPositionClasses = isMinimized
+    ? "sm:top-auto sm:bottom-6 sm:h-[60px]"
+    : "sm:top-[150px] sm:bottom-6 sm:h-auto";
+
   return (
     <div id="cflar-chatbot-root">
       {/* Floating Button */}
@@ -228,7 +263,7 @@ export function ChatWidget() {
             }}
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
             transition={{ duration: 0.2 }}
-            className={`fixed top-[116px] bottom-3 left-3 right-3 sm:top-auto sm:bottom-6 sm:right-6 sm:left-auto sm:w-[400px] sm:h-[650px] rounded-2xl shadow-2xl flex flex-col overflow-hidden z-50 ${
+            className={`fixed top-[126px] bottom-5 left-3 right-3 sm:right-6 sm:left-auto sm:w-[400px] ${desktopWindowPositionClasses} rounded-2xl shadow-2xl flex flex-col overflow-hidden z-50 ${
               isMinimized ? "bg-cflar-brown" : "bg-cflar-cream"
             }`}
           >
@@ -296,7 +331,10 @@ export function ChatWidget() {
                 </div>
 
                 {/* Messages */}
-                <div className="flex-1 overflow-y-auto px-4 pt-4 pb-4 space-y-3 bg-white">
+                <div
+                  ref={messagesContainerRef}
+                  className="flex-1 overflow-y-auto px-4 pt-4 pb-4 space-y-3 bg-white"
+                >
                   {messages.map((message, index) => (
                     <div
                       key={index}
