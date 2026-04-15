@@ -227,9 +227,9 @@ export function ChatWidget() {
     await streamChatResponse(userMessage);
   };
 
-  const desktopWindowPositionClasses = isMinimized
-    ? "sm:top-auto sm:bottom-6 sm:h-[60px]"
-    : "sm:top-[150px] sm:bottom-6 sm:h-auto";
+  const windowPositionClasses = isMinimized
+    ? "top-auto bottom-5 left-3 right-3 sm:top-auto sm:bottom-6 sm:right-6 sm:left-auto sm:w-[400px] sm:h-[60px]"
+    : "top-[126px] bottom-5 left-3 right-3 sm:top-[150px] sm:bottom-6 sm:right-6 sm:left-auto sm:w-[400px] sm:h-auto";
 
   return (
     <div id="cflar-chatbot-root">
@@ -263,7 +263,7 @@ export function ChatWidget() {
             }}
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
             transition={{ duration: 0.2 }}
-            className={`fixed top-[126px] bottom-5 left-3 right-3 sm:right-6 sm:left-auto sm:w-[400px] ${desktopWindowPositionClasses} rounded-2xl shadow-2xl flex flex-col overflow-hidden z-50 ${
+            className={`fixed ${windowPositionClasses} rounded-2xl shadow-2xl flex flex-col overflow-hidden z-50 ${
               isMinimized ? "bg-cflar-brown" : "bg-cflar-cream"
             }`}
           >
@@ -288,7 +288,10 @@ export function ChatWidget() {
                   )}
                 </button>
                 <button
-                  onClick={() => setIsOpen(false)}
+                  onClick={() => {
+                    setIsOpen(false);
+                    setIsMinimized(false);
+                  }}
                   className="cflar-iconbtn !bg-transparent hover:!bg-cflar-brown-hover rounded transition-colors"
                 >
                   <X size={20} />
