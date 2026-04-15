@@ -263,7 +263,7 @@ export function ChatWidget() {
             }}
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
             transition={{ duration: 0.2 }}
-            className={`fixed top-[126px] bottom-3 left-3 right-3 sm:right-6 sm:left-auto sm:w-[400px] ${desktopWindowPositionClasses} rounded-2xl shadow-2xl flex flex-col overflow-hidden z-50 ${
+            className={`fixed top-[126px] bottom-5 left-3 right-3 sm:right-6 sm:left-auto sm:w-[400px] ${desktopWindowPositionClasses} rounded-2xl shadow-2xl flex flex-col overflow-hidden z-50 ${
               isMinimized ? "bg-cflar-brown" : "bg-cflar-cream"
             }`}
           >
