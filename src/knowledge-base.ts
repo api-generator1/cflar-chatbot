@@ -367,25 +367,7 @@ export const knowledgeBase = {
       ],
       "scrapedAt": "2026-02-16T18:58:15.462Z"
     },
-    {
-      "url": "https://cflar.org/visit/events/big-cat-derby-day-2026/",
-      "title": "Big Cat Derby Day 2026 - Central Florida Animal Reserve",
-      "content": "Skip to content Big Cat Derby Day 2026 Presented by Central Florida Animal Reserve Date & Time May 2, 2026 4:00 - 7:30 PM Location Central Florida Animal Reserve 500 Broussard Road, St. Cloud, FL 34773 Pricing $55 Members $65 Non-Members Join us to watch the 152nd Kentucky Derby as we celebrate with Bourbon, Big Cats, and a Cat-Themed Hat Contest Reserve your ticket Ticket Information $55 Members, $65 Non-Members Dress Attire Bring your best and brightest cat-themed hat. Classy-casual, spring attire is welcomed, however minimalist footwear is not recommended. Please wear comfortable footwear as some areas have gravel and uneven surfaces. Reserve your ticket Location Information Central Florida Animal Reserve 500 Broussard Road, St. Cloud, FL 34773 Parking Information Staff will be on hand to direct you to the appropriate areas to park. If you require any assistance to attend the event, please contact directly to ensure accommodation. Reserve your ticket Event Flyer Frequently Asked Questions Event Sponsorship Opportunities Would you or your business like to sponsor this event? Event sponsorships help support CFAR's mission while offering visibility and community engagement opportunities.",
-      "headings": [
-        "Big Cat Derby Day 2026",
-        "Date & Time",
-        "Location",
-        "Pricing",
-        "Ticket Information",
-        "Dress Attire",
-        "Location Information",
-        "Parking Information",
-        "Event Flyer",
-        "Frequently Asked Questions",
-        "Event Sponsorship Opportunities"
-      ],
-      "scrapedAt": "2026-03-12T00:00:00.000Z"
-    },
+
     {
       "url": "https://cflar.org/get-involved/volunteer/teen-volunteers",
       "title": "Teen Volunteers - Central Florida Animal Reserve",
