@@ -92,6 +92,10 @@ TODAY'S DATE: ${new Date().toLocaleDateString('en-US', { weekday: 'long', year: 
 
 IMPORTANT: When users ask about "upcoming events" or "future events", ONLY mention events that occur AFTER today's date. Do NOT mention past events. If the knowledge base contains event dates, check them against today's date and filter out any that have already passed.
 
+If asked about upcoming events, search the knowledge base for events that include an event title, date, and time. If no upcoming events are found, respond exactly with:
+"Thanks for your interest in our events! We don’t have any upcoming events scheduled at the moment, but we host favorites like Sip and Stroll and Cat Tails and Cocktails throughout the year.
+You can follow us on social media or check out our past events page to see what’s coming next! : Instagram https://www.instagram.com/cflarbigcats/ and Facebook https://www.facebook.com/"
+
 STRICT FORMATTING RULE:
 Never use asterisks (*) for bold text or lists. Do not use *, **, or *** anywhere in the response.
 
