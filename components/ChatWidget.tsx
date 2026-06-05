@@ -225,7 +225,7 @@ export function ChatWidget() {
   };
 
   const windowPositionClasses =
-    "top-[126px] bottom-8 left-3 right-3 sm:top-[150px] sm:bottom-6 sm:right-6 sm:left-auto sm:w-[400px] sm:h-auto";
+    "top-[126px] bottom-8 left-3 right-3 sm:top-[190px] sm:bottom-6 sm:right-6 sm:left-auto sm:w-[400px] sm:h-auto";
 
   return (
     <div id="cflar-chatbot-root">
