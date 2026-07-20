@@ -98,7 +98,6 @@ export const knowledgeBase = {
         "Events at CFAR",
         "Event Sponsorships",
         "Upcoming Events",
-        "Vintage Vino Goes Wild",
         "Wild Cat Weekend",
         "Private Events",
         "Past Events",
