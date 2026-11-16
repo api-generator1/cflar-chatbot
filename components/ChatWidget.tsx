@@ -446,7 +446,7 @@ function getMockResponse(question: string): string {
     "How can I volunteer?":
       "Check out our [Volunteer page](https://cflar.org/get-involved/volunteer) to learn about opportunities.",
     "Tell me about upcoming events":
-      "See all upcoming events on our [Events page](https://cflar.org/events). We have exciting activities planned!",
+      "Thanks for your interest in our events! We don’t have any upcoming events scheduled at the moment. Follow us on [Facebook](https://www.facebook.com/CFLAR) for future event announcements.",
   };
 
   return (
