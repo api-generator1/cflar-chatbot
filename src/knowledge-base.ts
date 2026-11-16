@@ -4,7 +4,7 @@
 export const knowledgeBase = {
   "lastUpdated": "2026-10-08T00:00:00.000Z",
   "baseUrl": "https://cflar.org",
-  "pageCount": 36,
+  "pageCount": 32,
   "pages": [
     {
       "url": "https://cflar.org/",
@@ -517,78 +517,6 @@ export const knowledgeBase = {
         "Schedule"
       ],
       "scrapedAt": "2026-02-16T18:58:15.462Z"
-    },
-    {
-      "url": "https://cflar.org/event/sip-and-stroll-spring-2026",
-      "title": "Sip & Stroll - Spring 2026 - Central Florida Animal Reserve",
-      "content": "Sip & Stroll – Spring 2026 Presented by Central Florida Animal Reserve Date & Time Location Pricing Date & Time March 8, 2026 2pm - 5pm Location Central Florida Animal Reserve Pricing $55 Members $65 Non-Members Come enjoy an afternoon of fine wines paired with unique cheeses and a stroll with some of the most amazing creatures in the world! Reserve your ticket Ticket Information $55 Members, $65 Non-Members All proceeds go to help the animal residents of CFAR! Silent Auction Guests will be able to participate in a silent auction with all proceeds benefiting our resident cats! Guests must be present at the event to bid on items. All items will be distributed to winners before the event concludes. Dress Attire Classy-casual, spring attire is welcomed, however minimalist footwear is not recommended. Please wear comfortable footwear as some areas have gravel and uneven surfaces. Reserve your ticket Location Information Central Florida Animal Reserve 500 Broussard Road, St. Cloud, FL 34773 Parking Information Staff will be on hand to direct you to the appropriate areas to park. If you require any assistance to attend the event, please contact directly to ensure accommodation. Reserve your ticket Event Flyer Frequently Asked Questions How do I become a member to receive the member discount? Learn more on our membership page. Are there ID requirements or an age limit to enter the event? The recommended minimum age requirement is 21 years old. ID’s will be required at check-in. All guests are asked to please consume any alcohol responsibly. How long is the event? The self-guided stroll will be open from 2pm-3:30pm and the wine tasting class will be held after for approximately an hour. Event Sponsorship Opportunities Would you or your business like to sponsor this event? Event sponsorships help support CFAR’s mission while offering visibility and community engagement opportunities. Sponsor Don't miss out! Purchase your tickets today to reserve your spot. Reserve your ticket Share this event",
-      "headings": [
-        "Sip & Stroll – Spring 2026",
-        "Date & Time",
-        "Location",
-        "Pricing",
-        "Date & Time",
-        "March 8, 2026",
-        "2pm - 5pm",
-        "Location",
-        "Central Florida Animal Reserve",
-        "Pricing"
-      ],
-      "scrapedAt": "2026-02-16T18:58:16.144Z"
-    },
-    {
-      "url": "https://cflar.org/event/sip-and-stroll-spring-2025",
-      "title": "Sip & Stroll – Spring 2025 - Central Florida Animal Reserve",
-      "content": "Sip & Stroll – Spring 2025 Presented by Central Florida Animal Reserve Date & Time Location Pricing Date & Time March 9, 2025 2:00 – 5:00pm Location Central Florida Animal Reserve Pricing $55 Members $65 Non-Members Come and be a part of the Central Florida Animal Reserve’s semi-annual Big Cat Sip and Stroll fundraising event celebrating “The Spring Collection!” Indulge in an afternoon filled with the exquisite flavors of fine wines, embark on a captivating walking tour to admire our majestic big cats, and participate in the excitement of our silent auction. Join us for a delightful day of fellowship and fine wine for a cause! Ticket Information $55 Members, $65 Non-Members Tickets include a self-guided walk among our big cat residents. John Siudut of Vintage Vino, located in downtown Kissimmee, will guide you through a wine tasting and cheese pairing journey, curated especially for our event. You will also sample some light snacks and beverages at our charcuterie table while you peruse our silent auction items! Silent Auction Guests will be able to participate in a silent auction with all proceeds benefiting our resident cats! Guests must be present at the event to bid on items. All items will be distributed to winners before the event concludes. Dress Attire Classy-casual, spring attire is welcomed, however minimalist footwear is not recommended. Please wear comfortable footwear as some areas have gravel and uneven surfaces. Location Information Central Florida Animal Reserve 500 Broussard Road St. Cloud, FL 34773 Parking Information Staff will be on hand to direct you to the appropriate areas to park. If you require any assistance to attend the event, please contact directly to ensure accommodation. Event Flyer Frequently Asked Questions How do I become a member to receive the member discount? Learn more on our membership page. Are there ID requirements or an age limit to enter the event? The recommended minimum age requirement is 21 years old. ID’s will be required at check-in. All guests are asked to please consume any alcohol responsibly. How long is the event? The self-guided stroll will be open from 2pm-3:30pm and the wine tasting class will be held after for approximately an hour. Event Sponsorship Opportunities Would you or your business like to sponsor this event? Event sponsorships help support CFAR’s mission while offering visibility and community engagement opportunities. Sponsor Don't miss out! Purchase your tickets today to reserve your spot. Share this event",
-      "headings": [
-        "Sip & Stroll – Spring 2025",
-        "Date & Time",
-        "Location",
-        "Pricing",
-        "Date & Time",
-        "March 9, 2025",
-        "2:00 – 5:00pm",
-        "Location",
-        "Central Florida Animal Reserve",
-        "Pricing"
-      ],
-      "scrapedAt": "2026-02-16T18:58:16.841Z"
-    },
-    {
-      "url": "https://cflar.org/event/sip-and-stroll-fall-2025",
-      "title": "Sip & Stroll - Fall 2025 - Central Florida Animal Reserve",
-      "content": "Sip & Stroll – Fall 2025 Presented by Central Florida Animal Reserve Date & Time Location Pricing Date & Time November 2, 2025 2:00 – 5:00pm Location Central Florida Animal Reserve Pricing $55 Members $65 Non-Members Imagine an evening where fine wine meets fierce beauty – where every sip supports a cause as powerful as the creatures it protects. Featuring Live Music by Asli Goncer. Ticket Information $55 Members, $65 Non-Members Tickets include a self-guided walk among our big cat residents. John Siudut of Vintage Vino, located in downtown Kissimmee, will guide you through a wine tasting and cheese pairing journey, curated especially for our event. You will also sample some light snacks and beverages at our charcuterie table while you peruse our silent auction items! Silent Auction Guests will be able to participate in a silent auction with all proceeds benefiting our resident cats! Guests must be present at the event to bid on items. All items will be distributed to winners before the event concludes. Dress Attire Classy-casual, spring attire is welcomed, however minimalist footwear is not recommended. Please wear comfortable footwear as some areas have gravel and uneven surfaces. Location Information Central Florida Animal Reserve 500 Broussard Road, St. Cloud, FL 34773 Parking Information Staff will be on hand to direct you to the appropriate areas to park. If you require any assistance to attend the event, please contact directly to ensure accommodation. Event Flyer Frequently Asked Questions How do I become a member to receive the member discount? Learn more on our membership page. Are there ID requirements or an age limit to enter the event? The recommended minimum age requirement is 21 years old. ID’s will be required at check-in. All guests are asked to please consume any alcohol responsibly. How long is the event? The self-guided stroll will be open from 2pm-3:30pm and the wine tasting class will be held after for approximately an hour. Event Sponsorship Opportunities Would you or your business like to sponsor this event? Event sponsorships help support CFAR’s mission while offering visibility and community engagement opportunities. Sponsor Don't miss out! Purchase your tickets today to reserve your spot. Share this event",
-      "headings": [
-        "Sip & Stroll – Fall 2025",
-        "Date & Time",
-        "Location",
-        "Pricing",
-        "Date & Time",
-        "November 2, 2025",
-        "2:00 – 5:00pm",
-        "Location",
-        "Central Florida Animal Reserve",
-        "Pricing"
-      ],
-      "scrapedAt": "2026-02-16T18:58:17.596Z"
-    },
-    {
-      "url": "https://cflar.org/event/vintage-vino-goes-wild",
-      "title": "Vintage Vino Goes Wild - Central Florida Animal Reserve",
-      "content": "Vintage Vino Goes Wild Presented by Central Florida Animal Reserve Date & Time Location Pricing Date & Time July 25, 2025 6:00 pm – 8:30 pm Location Vintage Vino Pricing $55 Members $65 Non-Members On Friday, July 25, 2025, CFAR will host “Vintage Vino Goes Wild – A Fundraiser for CFAR“ at the charming Vintage Vino in downtown Kissimmee. This one-of-a-kind evening will feature fine wine, engaging stories from the world of big cat care, and the opportunity to make a real difference. Every guest in attendance will have the opportunity to participate in an educational wine and cheese tasting led by John Siudut, proprietor of Vintage Vino. In addition, guests will also receive a ticket for a tour of Central Florida Animal Reserve –home to some of the world’s most majestic animals: lions, tigers, leopards, and cougars. Ticket Information $55 Members, $65 Non-Members Experience five wine and cheese pairings, non-alcoholic beverages, a charcuterie spread, silent auction, and one ticket per guest to enjoy a tour to meet our majestic big cat residents. Along with the cheeses for the tasting, a light charcuterie will also be provided. Non-alcoholic beverages will also be available. Must be over 21 for alcoholic beverages. Silent Auction Get ready for some fun bidding on unique items. Dress Attire Casual Cocktail, climate controlled indoor environment. Location Information Vintage Vino 310 Broadway, Kissimmee, FL 34741 Parking Information Parking is provided behind Vintage Vino in the Sun Rail parking lot, along the street, and in the nearby parking garage. Event Flyer Frequently Asked Questions How do I become a member to receive the member discount? Learn more on our membership page. Are there ID requirements or an age limit to enter the event? Patrons must be of legal age for the consumption of alcohol. Please consume responsibly. How long is the event? The self-guided stroll will be open from 2pm-3:30pm and the wine tasting class will be held after for approximately an hour. Event Sponsorship Opportunities Would you or your business like to sponsor this event? Event sponsorships help support CFAR’s mission while offering visibility and community engagement opportunities. Sponsor Don't miss out! Purchase your tickets today to reserve your spot. Share this event",
-      "headings": [
-        "Vintage Vino Goes Wild",
-        "Date & Time",
-        "Location",
-        "Pricing",
-        "Date & Time",
-        "July 25, 2025",
-        "6:00 pm – 8:30 pm",
-        "Location",
-        "Vintage Vino",
-        "Pricing"
-      ],
-      "scrapedAt": "2026-02-16T18:58:19.017Z"
     },
     {
       "url": "https://cflar.org/get-involved/volunteer/teen-volunteers",

@@ -9,6 +9,22 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
+const NO_UPCOMING_EVENTS_RESPONSE =
+  "Thanks for your interest in our events! We don’t have any upcoming events scheduled at the moment. Follow us on [Facebook](https://www.facebook.com/CFLAR) for future event announcements.";
+
+function isUpcomingEventsQuestion(messages: Array<{ role?: string; content?: unknown }>) {
+  const latestUserMessage = [...messages]
+    .reverse()
+    .find((message) => message?.role === 'user' && typeof message.content === 'string');
+  const content = latestUserMessage?.content as string | undefined;
+
+  return Boolean(
+    content &&
+      /\bevents?\b/i.test(content) &&
+      /\b(upcoming|future|next|scheduled|coming up)\b/i.test(content)
+  );
+}
+
 export default async function handler(
   req: VercelRequest,
   res: VercelResponse
@@ -49,6 +65,25 @@ export default async function handler(
       } catch (e) {
         console.log('KB Parse Error:', e);
       }
+    }
+
+    const eventsPage = parsedKB?.pages?.find(
+      (page: any) => page.url === 'https://cflar.org/visit/events'
+    );
+    const knowledgeBaseSaysNoUpcomingEvents =
+      eventsPage?.content?.includes(
+        'We don’t have any upcoming events scheduled at the moment.'
+      );
+
+    if (knowledgeBaseSaysNoUpcomingEvents && isUpcomingEventsQuestion(messages)) {
+      res.setHeader('Content-Type', 'text/event-stream');
+      res.setHeader('Cache-Control', 'no-cache');
+      res.setHeader('Connection', 'keep-alive');
+      res.write(
+        `data: ${JSON.stringify({ content: NO_UPCOMING_EVENTS_RESPONSE })}\n\n`
+      );
+      res.write('data: [DONE]\n\n');
+      return res.end();
     }
     
     // Debug logging
@@ -97,7 +132,7 @@ IMPORTANT EVENT RULES:
 4. Use the no-events fallback ONLY when zero future events are found. Never combine the fallback with real event listings.
 
 NO-EVENTS FALLBACK RESPONSE:
-"Thanks for your interest in our events! We don’t have any upcoming events scheduled at the moment. Follow us on [Facebook](https://www.facebook.com/CFLAR) for future event announcements."
+"${NO_UPCOMING_EVENTS_RESPONSE}"
 
 STRICT FORMATTING RULE:
 Never use asterisks (*) for bold text or lists. Do not use *, **, or *** anywhere in the response.
